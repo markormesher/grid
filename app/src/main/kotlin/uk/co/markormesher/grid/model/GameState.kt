@@ -1,20 +1,15 @@
 package uk.co.markormesher.grid.model
 
-class GameState(val size: Int, val totalCellStates: Int = 2) {
+import android.os.Parcel
+import android.os.Parcelable
+
+class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
 	val cellStates: Array<Array<Int>> = Array(size) { Array(size) { 0 } }
 	val cellLinkedNeighbours = Array(size) { Array(size) { 0 } }
 
 	private val cellChangeListeners = HashSet<OnCellChangeListener>()
-
-	fun setLinkedNeighbours(row: Int, col: Int, vararg neighbours: Neighbour) {
-		resetLinkedNeighbours(row, col)
-		neighbours.forEach { addLinkedNeighbour(row, col, it) }
-	}
-
-	fun resetLinkedNeighbours(row: Int, col: Int) {
-		cellLinkedNeighbours[row][col] = 0
-	}
+	private val stateChangeListeners = HashSet<OnStateChangeListener>()
 
 	fun addLinkedNeighbour(row: Int, col: Int, neighbour: Neighbour) {
 		cellLinkedNeighbours[row][col] = cellLinkedNeighbours[row][col].or(neighbour.value)
@@ -26,6 +21,7 @@ class GameState(val size: Int, val totalCellStates: Int = 2) {
 
 		if (!cascadeAction) {
 			getNeighbourCoordinates(row, col).forEach { flip(it.first, it.second, true) }
+			callOnStateListeners()
 		}
 	}
 
@@ -50,6 +46,14 @@ class GameState(val size: Int, val totalCellStates: Int = 2) {
 		cellChangeListeners.forEach { it.onCellChange(row, col) }
 	}
 
+	fun addOnStateChangeListener(listener: OnStateChangeListener) {
+		stateChangeListeners.add(listener)
+	}
+
+	private fun callOnStateListeners() {
+		stateChangeListeners.forEach { it.onStateChange() }
+	}
+
 	enum class Neighbour(val value: Int, val rowDiff: Int, val colDiff: Int) {
 		NORTH(1, -1, 0), NORTH_EAST(2, -1, 1),
 		EAST(4, 0, 1), SOUTH_EAST(8, 1, 1),
@@ -63,6 +67,47 @@ class GameState(val size: Int, val totalCellStates: Int = 2) {
 
 	interface OnCellChangeListener {
 		fun onCellChange(row: Int, col: Int)
+	}
+
+	interface OnStateChangeListener {
+		fun onStateChange()
+	}
+
+	override fun writeToParcel(parcel: Parcel, flags: Int) {
+		parcel.writeInt(size)
+		parcel.writeInt(totalCellStates)
+		parcel.writeIntArray(cellStates.flatten().toIntArray())
+		parcel.writeIntArray(cellLinkedNeighbours.flatten().toIntArray())
+	}
+
+	override fun describeContents(): Int = 0
+
+	companion object CREATOR: Parcelable.Creator<GameState> {
+		override fun createFromParcel(parcel: Parcel): GameState {
+			val size = parcel.readInt()
+			val totalCellStates = parcel.readInt()
+
+			val flattenedCellStates = IntArray(size * size, { 0 })
+			parcel.readIntArray(flattenedCellStates)
+
+			val flattenedCellLinkedNeighbours = IntArray(size * size, { 0 })
+			parcel.readIntArray(flattenedCellLinkedNeighbours)
+
+			val state = GameState(size, totalCellStates)
+			for (row in 0..(size-1)) {
+				for (col in 0..(size-1)) {
+					val flatIndex = (row * size) + col
+					state.cellStates[row][col] = flattenedCellStates[flatIndex]
+					state.cellLinkedNeighbours[row][col] = flattenedCellLinkedNeighbours[flatIndex]
+				}
+			}
+
+			return state
+		}
+
+		override fun newArray(size: Int): Array<GameState?> {
+			return arrayOfNulls(size)
+		}
 	}
 
 }

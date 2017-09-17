@@ -3,6 +3,7 @@ package uk.co.markormesher.grid.ui
 import android.content.Context
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import uk.co.markormesher.grid.ui.cell_decorator.BasicCellDecorator
 class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
 	: RecyclerView(context, attrs, defStyle) {
 
-	var state = GameState(0)
+	var gameState = GameState(0)
 		set(state) {
 			field = state
 			layoutManager = GridLayoutManager(context, state.size)
@@ -29,14 +30,15 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
 	private val cellChangeListener = object: GameState.OnCellChangeListener {
 		override fun onCellChange(row: Int, col: Int) {
-			val position = (row * state.size) + col
+			val position = (row * gameState.size) + col
 			adapter.notifyItemChanged(position)
 		}
 	}
 
 	init {
-		overScrollMode = View.OVER_SCROLL_NEVER
 		adapter = GameCellAdapter()
+		overScrollMode = View.OVER_SCROLL_NEVER
+		(itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 	}
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -46,24 +48,24 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
 	inner class GameCellAdapter: RecyclerView.Adapter<GameCellHolder>() {
 
-		override fun getItemCount(): Int = state.size * state.size
+		override fun getItemCount(): Int = gameState.size * gameState.size
 
 		override fun onBindViewHolder(holder: GameCellHolder, position: Int) {
 			val cell = holder.cell
-			val row = position / state.size
-			val col = position.rem(state.size)
+			val row = position / gameState.size
+			val col = position.rem(gameState.size)
 
-			val cellState = state.cellStates[row][col]
+			val cellState = gameState.cellStates[row][col]
 			if (holder.lastState != cellState) {
-				decorator.decorateCell(cell, cellState, state.totalCellStates)
+				decorator.decorateCell(cell, cellState, gameState.totalCellStates)
 			}
 
 			if (holder.assignedRow != row || holder.assignedCol != col) {
 				holder.assignedRow = row
 				holder.assignedCol = col
 
-				cell.linkedNeighbours = state.cellLinkedNeighbours[row][col]
-				cell.setOnClickListener { state.flip(row, col) }
+				cell.linkedNeighbours = gameState.cellLinkedNeighbours[row][col]
+				cell.setOnClickListener { gameState.flip(row, col) }
 			}
 		}
 

@@ -1,88 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:padding="3dp"
+		android:padding="2dp"
 		>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			android:id="@+id/north_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentTop="true"
-			android:layout_centerHorizontal="true"
-			android:visibility="gone"
-			/>
+	<RelativeLayout
+			android:id="@+id/inner"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:padding="2dp"
+			>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/north_east_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentRight="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				android:id="@+id/north_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentTop="true"
+				android:layout_centerHorizontal="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/east_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentRight="true"
-			android:layout_centerVertical="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/north_east_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentRight="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/south_east_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentBottom="true"
-			android:layout_alignParentRight="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/east_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentRight="true"
+				android:layout_centerVertical="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			android:id="@+id/south_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/south_east_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentRight="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/south_west_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentBottom="true"
-			android:layout_alignParentLeft="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				android:id="@+id/south_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentBottom="true"
+				android:layout_centerHorizontal="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/west_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentLeft="true"
-			android:layout_centerVertical="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/south_west_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentLeft="true"
+				android:visibility="gone"
+				/>
 
-	<uk.co.markormesher.grid.ui.NeighbourIndicator
-			tools:ignore="RtlHardcoded"
-			android:id="@+id/north_west_neighbour_indicator"
-			android:layout_width="3dp"
-			android:layout_height="3dp"
-			android:layout_alignParentTop="true"
-			android:layout_alignParentLeft="true"
-			android:visibility="gone"
-			/>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/west_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentLeft="true"
+				android:layout_centerVertical="true"
+				android:visibility="gone"
+				/>
 
-</RelativeLayout>
+		<uk.co.markormesher.grid.ui.NeighbourIndicator
+				tools:ignore="RtlHardcoded"
+				android:id="@+id/north_west_neighbour_indicator"
+				android:layout_width="3dp"
+				android:layout_height="3dp"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true"
+				android:visibility="gone"
+				/>
+
+	</RelativeLayout>
+
+</LinearLayout>

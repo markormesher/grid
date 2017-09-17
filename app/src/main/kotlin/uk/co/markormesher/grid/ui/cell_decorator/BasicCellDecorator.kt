@@ -1,6 +1,7 @@
 package uk.co.markormesher.grid.ui.cell_decorator
 
 import android.graphics.Color
+import kotlinx.android.synthetic.main.ui_game_cell.view.*
 import uk.co.markormesher.grid.ui.GameCell
 
 open class BasicCellDecorator {
@@ -12,7 +13,7 @@ open class BasicCellDecorator {
 	)
 
 	open fun decorateCell(cell: GameCell, state: Int, totalStates: Int) {
-		cell.setBackgroundColor(basicColours[state.rem(basicColours.size)])
+		cell.inner.setBackgroundColor(basicColours[state.rem(basicColours.size)])
 	}
 
 }
