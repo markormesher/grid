@@ -10,13 +10,22 @@
 		android:background="@drawable/bg_game"
 		>
 
+	<include
+			android:id="@+id/stats_wrapper"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_above="@+id/game_board"
+			android:layout_centerHorizontal="true"
+			layout="@layout/merge_game_stats"
+			/>
+
 	<uk.co.markormesher.grid.ui.GameBoard
-			android:id="@+id/game_board"
+			android:id="@id/game_board"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_centerHorizontal="true"
 			android:layout_alignParentBottom="true"
-			android:alpha="0.4"
+			android:layout_centerHorizontal="true"
 			/>
 
 </RelativeLayout>

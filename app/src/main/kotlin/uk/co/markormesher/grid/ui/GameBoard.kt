@@ -19,6 +19,7 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 			field = state
 			layoutManager = GridLayoutManager(context, state.size)
 			state.addOnCellChangeListener(cellChangeListener)
+			state.addOnStateChangeListener(stateChangeListener)
 			adapter.notifyDataSetChanged()
 		}
 
@@ -29,9 +30,17 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 		}
 
 	private val cellChangeListener = object: GameState.OnCellChangeListener {
+		// DO NOT call notifyDataSetChanged() in here
 		override fun onCellChange(row: Int, col: Int) {
 			val position = (row * gameState.size) + col
 			adapter.notifyItemChanged(position)
+		}
+	}
+
+	private val stateChangeListener = object: GameState.OnStateChangeListener {
+		// DO NOT call notifyDataSetChanged() in here
+		override fun onStateChange() {
+			alpha = if (gameState.paused) 0.4f else 1.0f
 		}
 	}
 

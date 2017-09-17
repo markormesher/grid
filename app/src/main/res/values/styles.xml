@@ -6,4 +6,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="game_stat_title">
+		<item name="android:textColor">#ffffffff</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="game_stat_value">
+		<item name="android:textColor">#ffffffff</item>
+		<item name="android:textSize">18sp</item>
+		<item name="android:fontFamily">monospace</item>
+    </style>
+
 </resources>

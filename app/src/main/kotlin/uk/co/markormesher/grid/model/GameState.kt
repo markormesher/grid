@@ -8,6 +8,14 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 	val cellStates: Array<Array<Int>> = Array(size) { Array(size) { 0 } }
 	val cellLinkedNeighbours = Array(size) { Array(size) { 0 } }
 
+	var paused = false
+		set(value) {
+			field = value
+			callOnStateListeners()
+		}
+
+	var userFlipCount = 0
+
 	private val cellChangeListeners = HashSet<OnCellChangeListener>()
 	private val stateChangeListeners = HashSet<OnStateChangeListener>()
 
@@ -15,12 +23,20 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		cellLinkedNeighbours[row][col] = cellLinkedNeighbours[row][col].or(neighbour.value)
 	}
 
-	fun flip(row: Int, col: Int, cascadeAction: Boolean = false) {
+	fun flip(row: Int, col: Int, cascadeAction: Boolean = false, systemAction: Boolean = false) {
+		if (paused && !systemAction) {
+			return
+		}
+
+		if (!systemAction && !cascadeAction) {
+			++userFlipCount
+		}
+
 		cellStates[row][col] = (cellStates[row][col] + 1).rem(totalCellStates)
 		callOnCellListeners(row, col)
 
 		if (!cascadeAction) {
-			getNeighbourCoordinates(row, col).forEach { flip(it.first, it.second, true) }
+			getNeighbourCoordinates(row, col).forEach { flip(it.first, it.second, true, systemAction) }
 			callOnStateListeners()
 		}
 	}
@@ -34,8 +50,12 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		return output
 	}
 
+	fun qtyWinningCells(): Int {
+		return cellStates.sumBy { row -> row.count { state -> state == 0 } }
+	}
+
 	fun isWinningState(): Boolean {
-		return cellStates.all { row -> row.all { state -> state == 0 } }
+		return qtyWinningCells() == size * size
 	}
 
 	fun addOnCellChangeListener(listener: OnCellChangeListener) {
@@ -48,6 +68,10 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
 	fun addOnStateChangeListener(listener: OnStateChangeListener) {
 		stateChangeListeners.add(listener)
+	}
+
+	fun removeOnStateChangeListener(listener: OnStateChangeListener) {
+		stateChangeListeners.remove(listener)
 	}
 
 	private fun callOnStateListeners() {
@@ -78,6 +102,7 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		parcel.writeInt(totalCellStates)
 		parcel.writeIntArray(cellStates.flatten().toIntArray())
 		parcel.writeIntArray(cellLinkedNeighbours.flatten().toIntArray())
+		parcel.writeInt(if (paused) 1 else 0)
 	}
 
 	override fun describeContents(): Int = 0
@@ -94,13 +119,16 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 			parcel.readIntArray(flattenedCellLinkedNeighbours)
 
 			val state = GameState(size, totalCellStates)
-			for (row in 0..(size-1)) {
-				for (col in 0..(size-1)) {
+			for (row in 0..(size - 1)) {
+				for (col in 0..(size - 1)) {
 					val flatIndex = (row * size) + col
 					state.cellStates[row][col] = flattenedCellStates[flatIndex]
 					state.cellLinkedNeighbours[row][col] = flattenedCellLinkedNeighbours[flatIndex]
 				}
 			}
+
+			val paused = parcel.readInt() == 1
+			state.paused = paused
 
 			return state
 		}
