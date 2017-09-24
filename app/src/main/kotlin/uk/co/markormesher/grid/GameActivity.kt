@@ -18,7 +18,7 @@ class GameActivity: AppCompatActivity() {
 
 	companion object {
 		const val INITIAL_FLIP_DELAY = 1000L
-		const val INITIAL_FLIP_TIMING = 250L
+		const val INITIAL_FLIP_TIMING = 150L
 		const val TIMER_UPDATE_FREQUENCY = 200L
 	}
 
@@ -30,32 +30,19 @@ class GameActivity: AppCompatActivity() {
 	private val size = 5
 	private val totalCellStates = 2
 
-	private var gameState: GameState = makeSampleGameState(size, totalCellStates)
-	private var gameStarted = false
+	private var gameState = makeSampleGameState(size, totalCellStates)
+	private var lastGameStatus: GameState.Status? = null
 	private var initialFlipsStarted = false
-	private var initialFlipsRemaining = size
+	private var initialFlipsRemaining = size + 2
 	private var timer = SimpleTimer()
-	private var prevPauseState = gameState.paused
 
 	private val timerHandler = Handler(Looper.getMainLooper())
 	private val timerRunnable = Runnable { updateTimer() }
 
-	private val gameStateChangeListener = object: GameState.OnStateChangeListener {
-		override fun onStateChange() {
-			if (prevPauseState != gameState.paused) {
-				if (gameState.paused) {
-					onGamePaused()
-				} else {
-					onGameResumed()
-				}
-				prevPauseState = gameState.paused
-			}
-
+	private val gameStatusChangeListener = object: GameState.OnStatusChangeListener {
+		override fun onStatusChange() {
+			onGameStatusChange()
 			updateStats()
-
-			if (gameStarted && !gameState.paused && gameState.isWinningState()) {
-				onGameWon()
-			}
 		}
 	}
 
@@ -67,42 +54,29 @@ class GameActivity: AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-
-		gameState.addOnStateChangeListener(gameStateChangeListener)
+		gameState.addOnStatusChangeListener(gameStatusChangeListener)
 		queueTimerUpdates()
-
-		if (gameStarted) {
-			gameState.paused = false
-		}
 	}
 
 	override fun onPause() {
 		super.onPause()
-
-		if (gameStarted) {
-			gameState.paused = true
-		}
-
+		pauseGame()
 		cancelTimerUpdates()
-		gameState.removeOnStateChangeListener(gameStateChangeListener)
+		gameState.removeOnStatusChangeListener(gameStatusChangeListener)
 	}
 
 	private fun setState(savedInstanceState: Bundle?) {
 		gameState = savedInstanceState?.getParcelable("gameState") ?: gameState
-		gameStarted = savedInstanceState?.getBoolean("gameStarted") ?: gameStarted
 		initialFlipsStarted = savedInstanceState?.getBoolean("initialFlipsStarted") ?: initialFlipsStarted
 		initialFlipsRemaining = savedInstanceState?.getInt("initialFlipsRemaining") ?: initialFlipsRemaining
-		prevPauseState = savedInstanceState?.getBoolean("prevPauseState") ?: prevPauseState
 		timer = savedInstanceState?.getParcelable("timer") ?: timer
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		outState.putParcelable("gameState", gameState)
-		outState.putBoolean("gameStarted", gameStarted)
 		outState.putBoolean("initialFlipsStarted", initialFlipsStarted)
 		outState.putInt("initialFlipsRemaining", initialFlipsRemaining)
-		outState.putBoolean("prevPauseState", prevPauseState)
 		outState.putParcelable("timer", timer)
 	}
 
@@ -115,13 +89,30 @@ class GameActivity: AppCompatActivity() {
 		updateStats()
 
 		if (!initialFlipsStarted) {
-			gameState.paused = true
 			initialFlipsStarted = true
 			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_DELAY)
 		}
+
+		onGameStatusChange()
+	}
+
+	private fun onGameStatusChange() {
+		if (lastGameStatus == gameState.status) {
+			return
+		}
+		lastGameStatus = gameState.status
+
+		if (gameState.status == GameState.Status.WON) {
+			onGameWon()
+		}
+
+		stats_wrapper.alpha = if (gameState.status == GameState.Status.IN_PLAY) 1.0f else 0.4f
+		game_board.alpha = if (gameState.status == GameState.Status.IN_PLAY) 1.0f else 0.4f
 	}
 
 	private fun doInitialFlip() {
+		// TODO: don't repeat flips
+
 		if (initialFlipsRemaining > 0) {
 			gameState.flip(random.nextInt(size), random.nextInt(size), systemAction = true)
 			--initialFlipsRemaining
@@ -132,17 +123,10 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun onInitialFlipsComplete() {
-		gameState.paused = false
-		gameStarted = true
+		startOrResumeGame()
 	}
 
 	private fun updateStats() {
-		if (gameState.paused || !gameStarted) {
-			stats_wrapper.alpha = 0.4F
-		} else {
-			stats_wrapper.alpha = 1.0F
-		}
-
 		stat_level.text = getString(R.string.stat_level_value_format, gameStage, gameLevel)
 		stat_progress.text = getString(R.string.stat_progress_value_format, gameState.qtyWinningCells(), gameState.size * gameState.size)
 		stat_flips.text = getString(R.string.stat_flips_value_format, gameState.userFlipCount)
@@ -164,16 +148,33 @@ class GameActivity: AppCompatActivity() {
 		queueTimerUpdates()
 	}
 
-	private fun onGamePaused() {
-		timer.pause()
+	private fun startOrResumeGame() {
+		if (gameState.status != GameState.Status.PAUSED && gameState.status != GameState.Status.NOT_STARTED) {
+			return
+		}
+
+		timer.start()
+		gameState.status = GameState.Status.IN_PLAY
+		onGameStatusChange()
 	}
 
-	private fun onGameResumed() {
-		timer.start()
+	private fun pauseGame() {
+		if (gameState.status != GameState.Status.IN_PLAY) {
+			return
+		}
+
+		timer.pause()
+		// TODO: show pause modal
+
+		gameState.status = GameState.Status.PAUSED
+		onGameStatusChange()
 	}
 
 	private fun onGameWon() {
+		timer.pause()
+
 		Toast.makeText(this@GameActivity, "You Won!", Toast.LENGTH_SHORT).show()
-		gameState.paused = true
+
+		// TODO: show win modal
 	}
 }

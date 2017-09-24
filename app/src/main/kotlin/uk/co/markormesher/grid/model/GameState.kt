@@ -2,29 +2,25 @@ package uk.co.markormesher.grid.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import uk.co.markormesher.grid.helpers.log
 
 class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
 	val cellStates: Array<Array<Int>> = Array(size) { Array(size) { 0 } }
 	val cellLinkedNeighbours = Array(size) { Array(size) { 0 } }
 
-	var paused = false
-		set(value) {
-			field = value
-			callOnStateListeners()
-		}
-
 	var userFlipCount = 0
+	var status = Status.NOT_STARTED
 
 	private val cellChangeListeners = HashSet<OnCellChangeListener>()
-	private val stateChangeListeners = HashSet<OnStateChangeListener>()
+	private val statusChangeListeners = HashSet<OnStatusChangeListener>()
 
 	fun addLinkedNeighbour(row: Int, col: Int, neighbour: Neighbour) {
 		cellLinkedNeighbours[row][col] = cellLinkedNeighbours[row][col].or(neighbour.value)
 	}
 
 	fun flip(row: Int, col: Int, cascadeAction: Boolean = false, systemAction: Boolean = false) {
-		if (paused && !systemAction) {
+		if (status != Status.IN_PLAY && !systemAction) {
 			return
 		}
 
@@ -37,24 +33,28 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
 		if (!cascadeAction) {
 			getNeighbourCoordinates(row, col).forEach { flip(it.first, it.second, true, systemAction) }
-			callOnStateListeners()
+
+			if (isWinningState()) {
+				status = Status.WON
+			}
+
+			callOnStatusChangeListeners()
 		}
 	}
 
 	private fun getNeighbourCoordinates(row: Int, col: Int): List<Pair<Int, Int>> {
 		val linkedNeighbours = cellLinkedNeighbours[row][col]
-		val output = ArrayList<Pair<Int, Int>>()
-		Neighbour.ALL
+		return Neighbour.ALL
 				.filter { neighbour -> linkedNeighbours.and(neighbour.value) > 0 }
-				.forEach { neighbour -> output.add(Pair(row + neighbour.rowDiff, col + neighbour.colDiff)) }
-		return output
+				.map { neighbour -> Pair(row + neighbour.rowDiff, col + neighbour.colDiff) }
+				.filter { (x, y) -> x in 0..(size - 1) && y in 0..(size - 1) }
 	}
 
 	fun qtyWinningCells(): Int {
 		return cellStates.sumBy { row -> row.count { state -> state == 0 } }
 	}
 
-	fun isWinningState(): Boolean {
+	private fun isWinningState(): Boolean {
 		return qtyWinningCells() == size * size
 	}
 
@@ -66,16 +66,16 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		cellChangeListeners.forEach { it.onCellChange(row, col) }
 	}
 
-	fun addOnStateChangeListener(listener: OnStateChangeListener) {
-		stateChangeListeners.add(listener)
+	fun addOnStatusChangeListener(listener: OnStatusChangeListener) {
+		statusChangeListeners.add(listener)
 	}
 
-	fun removeOnStateChangeListener(listener: OnStateChangeListener) {
-		stateChangeListeners.remove(listener)
+	fun removeOnStatusChangeListener(listener: OnStatusChangeListener) {
+		statusChangeListeners.remove(listener)
 	}
 
-	private fun callOnStateListeners() {
-		stateChangeListeners.forEach { it.onStateChange() }
+	private fun callOnStatusChangeListeners() {
+		statusChangeListeners.forEach { it.onStatusChange() }
 	}
 
 	enum class Neighbour(val value: Int, val rowDiff: Int, val colDiff: Int) {
@@ -89,12 +89,29 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		}
 	}
 
+	enum class Status(val value: Int) {
+		NOT_STARTED(0),
+		IN_PLAY(1),
+		PAUSED(2),
+		WON(3);
+
+		companion object {
+			fun fromValue(value: Int): Status = when (value) {
+				0 -> NOT_STARTED
+				1 -> IN_PLAY
+				2 -> PAUSED
+				3 -> WON
+				else -> throw IllegalArgumentException("Could not get Status value of $value")
+			}
+		}
+	}
+
 	interface OnCellChangeListener {
 		fun onCellChange(row: Int, col: Int)
 	}
 
-	interface OnStateChangeListener {
-		fun onStateChange()
+	interface OnStatusChangeListener {
+		fun onStatusChange()
 	}
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -102,7 +119,8 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		parcel.writeInt(totalCellStates)
 		parcel.writeIntArray(cellStates.flatten().toIntArray())
 		parcel.writeIntArray(cellLinkedNeighbours.flatten().toIntArray())
-		parcel.writeInt(if (paused) 1 else 0)
+		parcel.writeInt(userFlipCount)
+		parcel.writeInt(status.value)
 	}
 
 	override fun describeContents(): Int = 0
@@ -127,8 +145,8 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 				}
 			}
 
-			val paused = parcel.readInt() == 1
-			state.paused = paused
+			state.userFlipCount = parcel.readInt()
+			state.status = Status.fromValue(parcel.readInt())
 
 			return state
 		}
