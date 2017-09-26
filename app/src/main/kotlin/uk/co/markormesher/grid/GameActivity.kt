@@ -36,7 +36,8 @@ class GameActivity: AppCompatActivity() {
 	private var gameState = makeSampleGameState(size, totalCellStates)
 	private var lastGameStatus: GameState.Status? = null
 	private var initialFlipsStarted = false
-	private var initialFlipsRemaining = size + 2
+	private var initialFlipsRemaining = size + 1
+	private val initialFlipsUsed = HashSet<Pair<Int, Int>>()
 	private var timer = SimpleTimer()
 
 	private val timerHandler = Handler(Looper.getMainLooper())
@@ -132,10 +133,15 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun doInitialFlip() {
-		// TODO: don't repeat flips
-
 		if (initialFlipsRemaining > 0) {
-			gameState.flip(random.nextInt(size), random.nextInt(size), systemAction = true)
+			// generate a unique flip (so we don't undo a previous flip)
+			var flip: Pair<Int, Int>
+			do {
+				flip = Pair(random.nextInt(size), random.nextInt(size))
+			} while (initialFlipsUsed.contains(flip))
+			initialFlipsUsed.add(flip)
+
+			gameState.flip(flip.first, flip.second, systemAction = true)
 			--initialFlipsRemaining
 			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_TIMING)
 		} else {
