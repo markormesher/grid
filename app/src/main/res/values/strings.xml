@@ -2,6 +2,9 @@
 
     <string name="app_name">Grid</string>
 
+    <string name="pre_game_start">Start Game</string>
+    <string name="pre_game_all_levels">All Levels</string>
+
     <string name="stat_level_title">Level</string>
     <string name="stat_progress_title">Progress</string>
     <string name="stat_time_title">Time</string>

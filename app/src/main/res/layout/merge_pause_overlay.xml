@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/paused_resume"
-                android:layout_marginBottom="@dimen/space_small"
+                android:layout_marginBottom="@dimen/space_nano"
                 />
 
         <Button

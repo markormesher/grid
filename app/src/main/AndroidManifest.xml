@@ -14,7 +14,10 @@
 			android:theme="@style/AppTheme"
 			android:fullBackupContent="true">
 
-		<activity android:name=".PreGameActivity">
+		<activity
+				android:name=".PreGameActivity"
+				android:screenOrientation="portrait"
+				>
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
