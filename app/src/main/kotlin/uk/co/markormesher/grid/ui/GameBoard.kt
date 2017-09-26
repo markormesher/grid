@@ -7,6 +7,7 @@ import android.support.v7.widget.SimpleItemAnimator
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import uk.co.markormesher.grid.helpers.log
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.ui.cell_decorator.BasicCellDecorator
 
@@ -19,6 +20,7 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 			field = state
 			layoutManager = GridLayoutManager(context, state.size)
 			state.addOnCellChangeListener(cellChangeListener)
+			state.addOnStatusChangeListener(statusChangeListener)
 			adapter.notifyDataSetChanged()
 		}
 
@@ -34,6 +36,12 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 			val position = (row * gameState.size) + col
 			adapter.notifyItemChanged(position)
 		}
+	}
+
+	private val statusChangeListener = object: GameState.OnStatusChangeListener {
+        override fun onStatusChange() {
+            adapter.notifyDataSetChanged()
+        }
 	}
 
 	init {
@@ -58,7 +66,7 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 
 			val cellState = gameState.cellStates[row][col]
 			if (holder.lastState != cellState) {
-				decorator.decorateCell(cell, cellState, gameState.totalCellStates)
+				decorator.decorateCell(cell, cellState, gameState)
 			}
 
 			if (holder.assignedRow != row || holder.assignedCol != col) {

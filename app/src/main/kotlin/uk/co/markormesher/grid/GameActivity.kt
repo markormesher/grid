@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.merge_game_stats.*
+import kotlinx.android.synthetic.main.merge_pause_overlay.*
+import kotlinx.android.synthetic.main.merge_win_overlay.*
 import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.model.makeSampleGameState
@@ -65,6 +68,15 @@ class GameActivity: AppCompatActivity() {
 		gameState.removeOnStatusChangeListener(gameStatusChangeListener)
 	}
 
+    override fun onBackPressed() {
+		when (gameState.status) {
+			GameState.Status.NOT_STARTED -> return
+			GameState.Status.WON -> finish()
+			GameState.Status.PAUSED -> startOrResumeGame()
+			GameState.Status.IN_PLAY -> pauseGame()
+		}
+    }
+
 	private fun setState(savedInstanceState: Bundle?) {
 		gameState = savedInstanceState?.getParcelable("gameState") ?: gameState
 		initialFlipsStarted = savedInstanceState?.getBoolean("initialFlipsStarted") ?: initialFlipsStarted
@@ -88,6 +100,12 @@ class GameActivity: AppCompatActivity() {
 		game_board.gameState = gameState
 		updateStats()
 
+		btn_pause_resume.setOnClickListener { startOrResumeGame() }
+		btn_pause_quit.setOnClickListener { finish() }
+
+		btn_win_next.setOnClickListener { Toast.makeText(this@GameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show() }
+		btn_win_quit.setOnClickListener { finish() }
+
 		if (!initialFlipsStarted) {
 			initialFlipsStarted = true
 			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_DELAY)
@@ -105,6 +123,9 @@ class GameActivity: AppCompatActivity() {
 		if (gameState.status == GameState.Status.WON) {
 			onGameWon()
 		}
+
+		pause_overlay.visibility = if (gameState.status == GameState.Status.PAUSED) View.VISIBLE else View.GONE
+		win_overlay.visibility = if (gameState.status == GameState.Status.WON) View.VISIBLE else View.GONE
 
 		stats_wrapper.alpha = if (gameState.status == GameState.Status.IN_PLAY) 1.0f else 0.4f
 		game_board.alpha = if (gameState.status == GameState.Status.IN_PLAY) 1.0f else 0.4f
@@ -155,7 +176,6 @@ class GameActivity: AppCompatActivity() {
 
 		timer.start()
 		gameState.status = GameState.Status.IN_PLAY
-		onGameStatusChange()
 	}
 
 	private fun pauseGame() {
@@ -164,17 +184,10 @@ class GameActivity: AppCompatActivity() {
 		}
 
 		timer.pause()
-		// TODO: show pause modal
-
 		gameState.status = GameState.Status.PAUSED
-		onGameStatusChange()
 	}
 
 	private fun onGameWon() {
 		timer.pause()
-
-		Toast.makeText(this@GameActivity, "You Won!", Toast.LENGTH_SHORT).show()
-
-		// TODO: show win modal
 	}
 }

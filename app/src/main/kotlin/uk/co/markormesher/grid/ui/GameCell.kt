@@ -26,6 +26,12 @@ class GameCell @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 			onLinkedNeighboursUpdate()
 		}
 
+	var showLinkedNeighbours = true
+		set (value) {
+			field = value
+			onLinkedNeighboursUpdate()
+		}
+
 	private fun onLinkedNeighboursUpdate() {
 		updateSingleNeighbour(north_neighbour_indicator, GameState.Neighbour.NORTH)
 		updateSingleNeighbour(north_east_neighbour_indicator, GameState.Neighbour.NORTH_EAST)
@@ -38,7 +44,7 @@ class GameCell @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
 	}
 
 	private fun updateSingleNeighbour(indicator: View, position: GameState.Neighbour) {
-		indicator.visibility = if (linkedNeighbours.and(position.value) > 0) {
+		indicator.visibility = if (showLinkedNeighbours && linkedNeighbours.and(position.value) > 0) {
 			View.VISIBLE
 		} else {
 			View.GONE

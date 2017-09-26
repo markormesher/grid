@@ -6,26 +6,48 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical"
-		android:padding="@dimen/activity_margin"
 		android:background="@drawable/bg_game"
 		>
 
-	<include
-			android:id="@+id/stats_wrapper"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentTop="true"
-			android:layout_above="@+id/game_board"
-			android:layout_centerHorizontal="true"
-			layout="@layout/merge_game_stats"
-			/>
-
-	<uk.co.markormesher.grid.ui.GameBoard
-			android:id="@id/game_board"
+	<RelativeLayout
+			android:id="@+id/content_wrapper"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:layout_alignParentBottom="true"
-			android:layout_centerHorizontal="true"
-			/>
+			android:padding="@dimen/activity_margin"
+			>
+
+		<include
+				android:id="@+id/stats_wrapper"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_alignParentTop="true"
+				android:layout_above="@+id/game_board"
+				android:layout_centerHorizontal="true"
+				layout="@layout/merge_game_stats"
+				/>
+
+		<uk.co.markormesher.grid.ui.GameBoard
+				android:id="@id/game_board"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_alignParentBottom="true"
+				android:layout_centerHorizontal="true"
+				/>
+
+	</RelativeLayout>
+
+	<include
+		android:id="@+id/pause_overlay"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="gone"
+		layout="@layout/merge_pause_overlay"/>
+
+	<include
+			android:id="@+id/win_overlay"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:visibility="gone"
+			layout="@layout/merge_win_overlay"/>
 
 </RelativeLayout>

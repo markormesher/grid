@@ -17,4 +17,12 @@
     <string name="stat_time_default">00:00</string>
     <string name="stat_flips_default">0</string>
 
+    <string name="paused_title">Paused</string>
+    <string name="paused_resume">Resume</string>
+    <string name="paused_quit">Quit</string>
+
+    <string name="win_title">You Win!</string>
+    <string name="win_next">Next Level</string>
+    <string name="win_quit">Quit</string>
+
 </resources>

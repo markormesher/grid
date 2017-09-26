@@ -2,7 +2,6 @@ package uk.co.markormesher.grid.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import uk.co.markormesher.grid.helpers.log
 
 class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
@@ -10,7 +9,16 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 	val cellLinkedNeighbours = Array(size) { Array(size) { 0 } }
 
 	var userFlipCount = 0
+	private var lastStatus = Status.NOT_STARTED
 	var status = Status.NOT_STARTED
+		set (value) {
+			val oldValue = field
+			field = value
+			if (value != oldValue) {
+                callOnStatusChangeListeners()
+            }
+			lastStatus = value
+		}
 
 	private val cellChangeListeners = HashSet<OnCellChangeListener>()
 	private val statusChangeListeners = HashSet<OnStatusChangeListener>()
@@ -37,8 +45,6 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 			if (isWinningState()) {
 				status = Status.WON
 			}
-
-			callOnStatusChangeListeners()
 		}
 	}
 
