@@ -1,35 +1,35 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+	</style>
 
-    <style name="game_stat_title">
+	<style name="game_stat_title">
 		<item name="android:textColor">#ffffffff</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:textSize">18sp</item>
-    </style>
+	</style>
 
-    <style name="game_stat_value">
+	<style name="game_stat_value">
 		<item name="android:textColor">#ffffffff</item>
 		<item name="android:textSize">18sp</item>
 		<item name="android:fontFamily">monospace</item>
-    </style>
+	</style>
 
-    <style name="pre_game_title">
-        <item name="android:textColor">#ff000000</item>
-        <item name="android:textSize">36sp</item>
-        <item name="android:textAllCaps">true</item>
+	<style name="pre_game_title">
+		<item name="android:textColor">#ff000000</item>
+		<item name="android:textSize">36sp</item>
+		<item name="android:textAllCaps">true</item>
 		<item name="android:fontFamily">monospace</item>
-    </style>
+	</style>
 
-    <style name="overlay_title">
-        <item name="android:textColor">#ffffffff</item>
-        <item name="android:textSize">28sp</item>
-        <item name="android:textAllCaps">true</item>
+	<style name="overlay_title">
+		<item name="android:textColor">#ffffffff</item>
+		<item name="android:textSize">28sp</item>
+		<item name="android:textAllCaps">true</item>
 		<item name="android:fontFamily">monospace</item>
-    </style>
+	</style>
 
 </resources>

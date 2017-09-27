@@ -15,8 +15,8 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 			val oldValue = field
 			field = value
 			if (value != oldValue) {
-                callOnStatusChangeListeners()
-            }
+				callOnStatusChangeListeners()
+			}
 			lastStatus = value
 		}
 
@@ -66,6 +66,10 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 
 	fun addOnCellChangeListener(listener: OnCellChangeListener) {
 		cellChangeListeners.add(listener)
+	}
+
+	fun removeOnCellChangeListener(listener: OnCellChangeListener) {
+		cellChangeListeners.remove(listener)
 	}
 
 	private fun callOnCellListeners(row: Int, col: Int) {

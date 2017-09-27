@@ -19,7 +19,7 @@ open class BasicCellDecorator {
 		if (gameState.status == GameState.Status.PAUSED) {
 			cell.inner.setBackgroundColor(pausedColour)
 			cell.showLinkedNeighbours = false
-        } else {
+		} else {
 			cell.inner.setBackgroundColor(basicColours[state.rem(basicColours.size)])
 			cell.showLinkedNeighbours = true
 		}

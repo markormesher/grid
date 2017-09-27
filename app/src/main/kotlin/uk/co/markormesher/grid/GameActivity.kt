@@ -20,7 +20,6 @@ import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
 
-
 class GameActivity: AppCompatActivity() {
 
 	companion object {
@@ -47,10 +46,15 @@ class GameActivity: AppCompatActivity() {
 	private val timerHandler = Handler(Looper.getMainLooper())
 	private val timerRunnable = Runnable { updateTimer() }
 
+	private val gameCellChangeListener = object: GameState.OnCellChangeListener {
+		override fun onCellChange(row: Int, col: Int) {
+			updateStats()
+		}
+	}
+
 	private val gameStatusChangeListener = object: GameState.OnStatusChangeListener {
 		override fun onStatusChange() {
 			onGameStatusChange()
-			updateStats()
 		}
 	}
 
@@ -63,6 +67,7 @@ class GameActivity: AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
+		gameState.addOnCellChangeListener(gameCellChangeListener)
 		gameState.addOnStatusChangeListener(gameStatusChangeListener)
 		queueTimerUpdates()
 	}
@@ -71,17 +76,18 @@ class GameActivity: AppCompatActivity() {
 		super.onPause()
 		pauseGame()
 		cancelTimerUpdates()
+		gameState.removeOnCellChangeListener(gameCellChangeListener)
 		gameState.removeOnStatusChangeListener(gameStatusChangeListener)
 	}
 
-    override fun onBackPressed() {
+	override fun onBackPressed() {
 		when (gameState.status) {
 			GameState.Status.NOT_STARTED -> return
 			GameState.Status.WON -> finish()
 			GameState.Status.PAUSED -> startOrResumeGame()
 			GameState.Status.IN_PLAY -> pauseGame()
 		}
-    }
+	}
 
 	private fun setState(savedInstanceState: Bundle?) {
 		gameState = savedInstanceState?.getParcelable("gameState") ?: gameState

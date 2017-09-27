@@ -5,12 +5,15 @@ buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
-		maven { url 'https://maven.fabric.io/public' }
+		maven {
+			url 'https://maven.fabric.io/public'
+		}
 	}
 
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-		classpath 'io.fabric.tools:gradle:1.+'	}
+		classpath 'io.fabric.tools:gradle:1.24.2'
+	}
 }
 
 repositories {
@@ -20,7 +23,6 @@ repositories {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
@@ -85,3 +87,5 @@ dependencies {
 		exclude group: 'com.android.support', module: 'support-annotations'
 	})
 }
+
+apply plugin: 'com.google.gms.google-services'

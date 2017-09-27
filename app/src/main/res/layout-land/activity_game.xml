@@ -12,7 +12,6 @@
 			android:id="@+id/content_wrapper"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:padding="@dimen/activity_margin"
 			>
 
 		<include
@@ -34,8 +33,7 @@
 				android:layout_alignParentRight="true"
 				android:layout_alignParentEnd="true"
 				android:layout_centerVertical="true"
-				android:layout_marginLeft="@dimen/space_small"
-				android:layout_marginStart="@dimen/space_small"
+				android:padding="@dimen/game_cell_padding"
 				/>
 
 	</RelativeLayout>
@@ -45,13 +43,15 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:visibility="gone"
-			layout="@layout/merge_pause_overlay"/>
+			layout="@layout/merge_pause_overlay"
+			/>
 
 	<include
 			android:id="@+id/win_overlay"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:visibility="gone"
-			layout="@layout/merge_win_overlay"/>
+			layout="@layout/merge_win_overlay"
+			/>
 
 </RelativeLayout>
