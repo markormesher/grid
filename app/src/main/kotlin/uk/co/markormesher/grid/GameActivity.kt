@@ -8,6 +8,8 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.merge_game_stats.*
 import kotlinx.android.synthetic.main.merge_pause_overlay.*
@@ -16,6 +18,8 @@ import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
+
+
 
 class GameActivity: AppCompatActivity() {
 
@@ -52,6 +56,7 @@ class GameActivity: AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Fabric.with(this, Crashlytics())
 		setState(savedInstanceState)
 		initView()
 	}

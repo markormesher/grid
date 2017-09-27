@@ -45,7 +45,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:layout_marginBottom="@dimen/space_nano"
-						style="@style/Widget.AppCompat.Button"
+						android:text="@string/pre_game_start"
 						/>
 
 				<Button

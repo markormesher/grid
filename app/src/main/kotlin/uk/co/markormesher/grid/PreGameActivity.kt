@@ -7,9 +7,13 @@ import android.os.Looper
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
+
+
 
 class PreGameActivity : AppCompatActivity() {
 
@@ -21,6 +25,7 @@ class PreGameActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Fabric.with(this, Crashlytics())
 		initView()
 	}
 

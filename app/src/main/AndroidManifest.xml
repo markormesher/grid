@@ -4,6 +4,8 @@
 		xmlns:tools="http://schemas.android.com/tools"
 		package="uk.co.markormesher.grid">
 
+	<uses-permission android:name="android.permission.INTERNET" />
+
 	<application
 			tools:ignore="GoogleAppIndexingWarning"
 			android:allowBackup="true"
@@ -25,6 +27,11 @@
 		</activity>
 
 		<activity android:name=".GameActivity"/>
+
+		<meta-data
+				android:name="io.fabric.ApiKey"
+				android:value="076865217e8ec2012747576d59a28c216384bae8"
+				/>
 
 	</application>
 
