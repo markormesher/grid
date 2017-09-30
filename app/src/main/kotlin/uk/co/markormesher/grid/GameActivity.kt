@@ -1,5 +1,6 @@
 package uk.co.markormesher.grid
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.merge_game_stats.*
 import kotlinx.android.synthetic.main.merge_pause_overlay.*
 import kotlinx.android.synthetic.main.merge_win_overlay.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.model.makeSampleGameState
@@ -63,6 +65,10 @@ class GameActivity: AppCompatActivity() {
 		Fabric.with(this, Crashlytics())
 		setState(savedInstanceState)
 		initView()
+	}
+
+	override fun attachBaseContext(newBase: Context) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
 	}
 
 	override fun onResume() {

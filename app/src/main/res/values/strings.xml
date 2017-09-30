@@ -4,6 +4,8 @@
 
 	<string name="pre_game_start">Start Game</string>
 	<string name="pre_game_all_levels">All Levels</string>
+	<string name="pre_game_badges">Badges</string>
+	<string name="pre_game_help">Help</string>
 
 	<string name="stat_level_title">Level</string>
 	<string name="stat_progress_title">Progress</string>

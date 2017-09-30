@@ -1,5 +1,6 @@
 package uk.co.markormesher.grid
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,16 +8,18 @@ import android.os.Looper
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
 class PreGameActivity: AppCompatActivity() {
 
-	private val size = 6
-	private val gameState = makeSampleGameState(size, 2)
+	private val size = 5
+	private val gameState = makeSampleGameState(size, 3)
 	private val handler = Handler(Looper.getMainLooper())
 	private val flipRunnable = Runnable { doFlip() }
 	private val random = Random()
@@ -27,12 +30,25 @@ class PreGameActivity: AppCompatActivity() {
 		initView()
 	}
 
+	override fun attachBaseContext(newBase: Context) {
+		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+	}
+
 	private fun initView() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_pre_game)
 		btn_start_game.setOnClickListener {
 			startActivity(Intent(this@PreGameActivity, GameActivity::class.java))
+		}
+		btn_all_levels.setOnClickListener {
+			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()
+		}
+		btn_badges.setOnClickListener {
+			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()
+		}
+		btn_help.setOnClickListener {
+			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()
 		}
 		game_board.gameState = gameState
 	}

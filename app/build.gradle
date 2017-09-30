@@ -78,6 +78,7 @@ dependencies {
 	compile 'com.android.support:support-v4:26.0.1'
 	compile 'com.android.support:recyclerview-v7:26.0.1'
 	compile 'com.android.support:appcompat-v7:26.0.1'
+	compile 'uk.co.chrisjenx:calligraphy:2.3.0'
 	compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
 		transitive = true
 	}

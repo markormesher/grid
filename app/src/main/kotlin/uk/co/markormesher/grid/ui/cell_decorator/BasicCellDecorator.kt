@@ -10,9 +10,9 @@ open class BasicCellDecorator {
 	private val pausedColour = Color.GRAY
 
 	private val basicColours = arrayOf(
-			Color.GREEN,
-			Color.RED,
-			Color.BLUE
+			Color.parseColor("#64dd17"),
+			Color.parseColor("#d50000"),
+			Color.parseColor("#2962ff")
 	)
 
 	open fun decorateCell(cell: GameCell, state: Int, gameState: GameState) {
