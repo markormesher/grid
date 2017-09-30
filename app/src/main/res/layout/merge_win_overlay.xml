@@ -1,44 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:orientation="vertical"
 		android:gravity="center"
-		android:weightSum="2"
 		android:background="#aa000000"
 		>
 
-	<LinearLayout
-			android:layout_width="0dp"
-			android:layout_weight="1"
+	<TextView
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:gravity="center"
+			android:layout_marginBottom="@dimen/space_medium"
+			android:text="@string/win_title"
+			style="@style/overlay_title"
+			/>
+
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:weightSum="2"
+			android:baselineAligned="false"
 			>
 
-		<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/space_medium"
-				android:text="@string/win_title"
-				style="@style/overlay_title"
-				/>
-
-		<Button
+		<LinearLayout
 				android:id="@+id/btn_win_next"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
+				android:layout_weight="1"
 				android:layout_height="wrap_content"
-				android:text="@string/win_next"
-				android:layout_marginBottom="@dimen/space_small"
-				/>
+				style="@style/large_button_wrapper"
+				>
 
-		<Button
+			<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/space_nano"
+					android:src="@drawable/ic_play_arrow_white_48dp"
+					android:contentDescription="@string/win_next"
+					style="@style/large_button_icon"
+					/>
+
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/win_next"
+					style="@style/large_button_label"
+					/>
+
+		</LinearLayout>
+
+		<LinearLayout
 				android:id="@+id/btn_win_quit"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
+				android:layout_weight="1"
 				android:layout_height="wrap_content"
-				android:text="@string/win_quit"
-				/>
+				style="@style/large_button_wrapper"
+				>
+
+			<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/space_nano"
+					android:src="@drawable/ic_help_outline_white_48dp"
+					android:contentDescription="@string/win_quit"
+					style="@style/large_button_icon"
+					/>
+
+			<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/win_quit"
+					style="@style/large_button_label"
+					/>
+
+		</LinearLayout>
 
 	</LinearLayout>
 

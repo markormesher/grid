@@ -22,7 +22,6 @@ import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
-
 class GameActivity: AppCompatActivity() {
 
 	companion object {

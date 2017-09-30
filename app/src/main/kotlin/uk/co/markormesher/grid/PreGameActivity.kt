@@ -45,7 +45,7 @@ class PreGameActivity: AppCompatActivity() {
 			startActivity(intent)
 		}
 		btn_all_levels.setOnClickListener {
-			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()
+			startActivity(Intent(this@PreGameActivity, LevelSelectActivity::class.java))
 		}
 		btn_badges.setOnClickListener {
 			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()

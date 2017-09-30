@@ -27,6 +27,8 @@
 			</intent-filter>
 		</activity>
 
+		<activity android:name=".LevelSelectActivity"/>
+
 		<activity android:name=".GameActivity"/>
 
 		<meta-data

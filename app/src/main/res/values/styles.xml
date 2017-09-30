@@ -9,6 +9,24 @@
 		<item name="android:textColor">@color/white</item>
 	</style>
 
+	<style name="large_button_wrapper">
+		<item name="android:padding">@dimen/space_small</item>
+		<item name="android:gravity">center</item>
+		<item name="android:background">?android:selectableItemBackground</item>
+		<item name="android:orientation">vertical</item>
+	</style>
+
+	<style name="large_button_icon">
+		<item name="android:tint">@color/grey</item>
+	</style>
+
+	<style name="large_button_label">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">12sp</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:fontFamily">monospace</item>
+	</style>
+
 	<style name="game_stat_title">
 		<item name="android:textColor">@color/white</item>
 		<item name="android:textStyle">bold</item>
@@ -28,10 +46,18 @@
 		<item name="android:fontFamily">monospace</item>
 	</style>
 
-	<style name="pre_game_button_label">
+	<style name="level_select_title" parent="pre_game_title"/>
+
+	<style name="level_select_stage_text">
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">12sp</item>
+		<item name="android:textSize">18sp</item>
 		<item name="android:textAllCaps">true</item>
+		<item name="android:fontFamily">monospace</item>
+	</style>
+
+	<style name="level_select_sub_stage_text">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">14sp</item>
 		<item name="android:fontFamily">monospace</item>
 	</style>
 

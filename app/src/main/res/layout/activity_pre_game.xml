@@ -57,10 +57,7 @@
 					android:layout_width="0dp"
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:padding="@dimen/space_small"
-					android:gravity="center"
-					android:background="?android:selectableItemBackground"
+					style="@style/large_button_wrapper"
 					>
 
 				<ImageView
@@ -69,14 +66,14 @@
 						android:layout_marginBottom="@dimen/space_nano"
 						android:src="@drawable/ic_play_arrow_white_48dp"
 						android:contentDescription="@string/pre_game_start"
-						android:tint="@color/grey"
+						style="@style/large_button_icon"
 						/>
 
 				<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/pre_game_start"
-						style="@style/pre_game_button_label"
+						style="@style/large_button_label"
 						/>
 
 			</LinearLayout>
@@ -86,10 +83,7 @@
 					android:layout_width="0dp"
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:padding="@dimen/space_small"
-					android:gravity="center"
-					android:background="?android:selectableItemBackground"
+					style="@style/large_button_wrapper"
 					>
 
 				<ImageView
@@ -98,20 +92,19 @@
 						android:layout_marginBottom="@dimen/space_nano"
 						android:src="@drawable/ic_list_white_48dp"
 						android:contentDescription="@string/pre_game_all_levels"
-						android:tint="@color/grey"
+						style="@style/large_button_icon"
 						/>
 
 				<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/pre_game_all_levels"
-						style="@style/pre_game_button_label"
+						style="@style/large_button_label"
 						/>
 
 			</LinearLayout>
 
 		</LinearLayout>
-
 
 		<LinearLayout
 				android:layout_width="match_parent"
@@ -126,10 +119,7 @@
 					android:layout_width="0dp"
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:padding="@dimen/space_small"
-					android:gravity="center"
-					android:background="?android:selectableItemBackground"
+					style="@style/large_button_wrapper"
 					>
 
 				<ImageView
@@ -138,14 +128,14 @@
 						android:layout_marginBottom="@dimen/space_nano"
 						android:src="@drawable/ic_star_white_48dp"
 						android:contentDescription="@string/pre_game_badges"
-						android:tint="@color/grey"
+						style="@style/large_button_icon"
 						/>
 
 				<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/pre_game_badges"
-						style="@style/pre_game_button_label"
+						style="@style/large_button_label"
 						/>
 
 			</LinearLayout>
@@ -155,10 +145,7 @@
 					android:layout_width="0dp"
 					android:layout_weight="1"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:padding="@dimen/space_small"
-					android:gravity="center"
-					android:background="?android:selectableItemBackground"
+					style="@style/large_button_wrapper"
 					>
 
 				<ImageView
@@ -167,14 +154,14 @@
 						android:layout_marginBottom="@dimen/space_nano"
 						android:src="@drawable/ic_help_outline_white_48dp"
 						android:contentDescription="@string/pre_game_help"
-						android:tint="@color/grey"
+						style="@style/large_button_icon"
 						/>
 
 				<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/pre_game_help"
-						style="@style/pre_game_button_label"
+						style="@style/large_button_label"
 						/>
 
 			</LinearLayout>
@@ -182,5 +169,14 @@
 		</LinearLayout>
 
 	</LinearLayout>
+
+	<uk.co.markormesher.grid.ui.GameBoard
+			android:id="@id/game_board"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentBottom="true"
+			android:layout_margin="@dimen/game_cell_padding"
+			android:visibility="gone"
+			/>
 
 </RelativeLayout>
