@@ -13,6 +13,7 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
@@ -39,7 +40,9 @@ class PreGameActivity: AppCompatActivity() {
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_pre_game)
 		btn_start_game.setOnClickListener {
-			startActivity(Intent(this@PreGameActivity, GameActivity::class.java))
+			val intent = Intent(this@PreGameActivity, GameActivity::class.java)
+			intent.putExtra("level", Level(1, 1, 5, 6, 2))
+			startActivity(intent)
 		}
 		btn_all_levels.setOnClickListener {
 			Toast.makeText(this@PreGameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show()

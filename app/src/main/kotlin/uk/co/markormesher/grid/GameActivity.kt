@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.merge_win_overlay.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.model.GameState
+import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
@@ -32,16 +33,12 @@ class GameActivity: AppCompatActivity() {
 
 	private val random by lazy { Random() }
 
-	// TODO: pass these as options
-	private val gameStage = 1
-	private val gameLevel = 1
-	private val size = 5
-	private val totalCellStates = 2
-
-	private var gameState = makeSampleGameState(size, totalCellStates)
+	private var initialised = false
+	private lateinit var level: Level
+	private lateinit var gameState: GameState
 	private var lastGameStatus: GameState.Status? = null
 	private var initialFlipsStarted = false
-	private var initialFlipsRemaining = size + 1
+	private var initialFlipsDone = 0
 	private val initialFlipsUsed = HashSet<Pair<Int, Int>>()
 	private var timer = SimpleTimer()
 
@@ -63,6 +60,12 @@ class GameActivity: AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		Fabric.with(this, Crashlytics())
+
+		if (!initialised) {
+			level = intent?.extras?.getParcelable("level") ?: Level(0, 0, 5, 5, 2)
+			gameState = makeSampleGameState(level.size, level.cellStates)
+		}
+
 		setState(savedInstanceState)
 		initView()
 	}
@@ -98,16 +101,18 @@ class GameActivity: AppCompatActivity() {
 	private fun setState(savedInstanceState: Bundle?) {
 		gameState = savedInstanceState?.getParcelable("gameState") ?: gameState
 		initialFlipsStarted = savedInstanceState?.getBoolean("initialFlipsStarted") ?: initialFlipsStarted
-		initialFlipsRemaining = savedInstanceState?.getInt("initialFlipsRemaining") ?: initialFlipsRemaining
+		initialFlipsDone = savedInstanceState?.getInt("initialFlipsDone") ?: initialFlipsDone
 		timer = savedInstanceState?.getParcelable("timer") ?: timer
+		level = savedInstanceState?.getParcelable("level") ?: level
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		outState.putParcelable("gameState", gameState)
 		outState.putBoolean("initialFlipsStarted", initialFlipsStarted)
-		outState.putInt("initialFlipsRemaining", initialFlipsRemaining)
+		outState.putInt("initialFlipsDone", initialFlipsDone)
 		outState.putParcelable("timer", timer)
+		outState.putParcelable("level", level)
 	}
 
 	private fun initView() {
@@ -150,16 +155,16 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun doInitialFlip() {
-		if (initialFlipsRemaining > 0) {
+		if (initialFlipsDone < level.flips) {
 			// generate a unique flip (so we don't undo a previous flip)
 			var flip: Pair<Int, Int>
 			do {
-				flip = Pair(random.nextInt(size), random.nextInt(size))
+				flip = Pair(random.nextInt(level.size), random.nextInt(level.size))
 			} while (initialFlipsUsed.contains(flip))
 			initialFlipsUsed.add(flip)
 
 			gameState.flip(flip.first, flip.second, systemAction = true)
-			--initialFlipsRemaining
+			++initialFlipsDone
 			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_TIMING)
 		} else {
 			onInitialFlipsComplete()
@@ -171,7 +176,7 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun updateStats() {
-		stat_level.text = getString(R.string.stat_level_value_format, gameStage, gameLevel)
+		stat_level.text = getString(R.string.stat_level_value_format, level.stage, level.subStage)
 		stat_progress.text = getString(R.string.stat_progress_value_format, gameState.qtyWinningCells(), gameState.size * gameState.size)
 		stat_flips.text = getString(R.string.stat_flips_value_format, gameState.userFlipCount)
 	}
