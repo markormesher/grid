@@ -5,12 +5,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
 class BaseApplication: Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-        CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
-                //.setDefaultFontPath("fonts/.ttf")
-                .build()
-        )
-    }
+	override fun onCreate() {
+		super.onCreate()
+		CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
+				//.setDefaultFontPath("fonts/.ttf")
+				.build()
+		)
+	}
 
 }
