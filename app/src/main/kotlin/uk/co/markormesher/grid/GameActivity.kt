@@ -66,7 +66,7 @@ class GameActivity: AppCompatActivity() {
 
 		if (!initialised) {
 			initialised = true
-			level = LevelHelper.allLevels[intent?.extras?.getInt("level") ?: 0]
+			level = LevelHelper.getLevel(intent?.extras?.getString("level") ?: LevelHelper.DEFAULT_LEVEL)
 			gameState = level.initialState
 		}
 
@@ -106,7 +106,7 @@ class GameActivity: AppCompatActivity() {
 	private fun showHelpDialog() {
 		if (level.helpTitle != null || level.helpBody != null) {
 			helpDialogShown = true
-			AlertDialog.Builder(this)
+			AlertDialog.Builder(this) // TODO: custom dialog
 					.setTitle(level.helpTitle)
 					.setMessage(level.helpBody)
 					.setPositiveButton(R.string.ok, { _, _ -> startInitialFlips() })

@@ -22,15 +22,17 @@ class LevelSelectActivity: AppCompatActivity() {
 	private val levelListItems by lazy {
 		val items = ArrayList<LevelListItem>()
 		var lastStage = 0
-		LevelHelper.allLevels.forEachIndexed { index, level ->
+		LevelHelper.allLevels.forEach { level ->
 			if (level.stage != lastStage) {
 				lastStage = level.stage
 				items.add(LevelListItem(true, level.stage))
 			}
-			items.add(LevelListItem(false, level.subStage, index))
+			items.add(LevelListItem(false, level.subStage, level.tag))
 		}
 		return@lazy items
 	}
+
+	private val nextLevelTag = LevelHelper.getNextLevelTag()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -89,12 +91,21 @@ class LevelSelectActivity: AppCompatActivity() {
 				}
 			} else {
 				with(holder as SubStageViewHolder) {
-					label.text = getString(R.string.level_select_sub_stage, levelListItems[position].number)
-					view.setOnClickListener {
-						val intent = Intent(this@LevelSelectActivity, GameActivity::class.java)
-						intent.putExtra("level", levelListItems[position].index)
-						startActivity(intent)
-						finish()
+					val levelTag = levelListItems[position].tag
+					val level = LevelHelper.getLevel(levelTag)
+					if (LevelHelper.isLevelCompleted(level.tag) || level.tag == nextLevelTag) {
+						label.text = getString(R.string.level_select_sub_stage, levelListItems[position].number)
+						lockIcon.visibility = View.INVISIBLE
+						view.setOnClickListener {
+							val intent = Intent(this@LevelSelectActivity, GameActivity::class.java)
+							intent.putExtra("level", level.tag)
+							startActivity(intent)
+							finish()
+						}
+					} else {
+						label.text = null
+						lockIcon.visibility = View.VISIBLE
+						view.setOnClickListener(null)
 					}
 				}
 			}
@@ -103,13 +114,14 @@ class LevelSelectActivity: AppCompatActivity() {
 	}
 
 	class StageViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-		val label = view.stageLabel!!
+		val label = view.stage_label!!
 	}
 
 	class SubStageViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-		val label = view.subStageLabel!!
+		val label = view.sub_stage_label!!
+		val lockIcon = view.lock_icon!!
 	}
 
-	data class LevelListItem(val isStage: Boolean, val number: Int, val index: Int = 0)
+	data class LevelListItem(val isStage: Boolean, val number: Int, val tag: String = "")
 
 }

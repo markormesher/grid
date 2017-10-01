@@ -1,10 +1,14 @@
 package uk.co.markormesher.grid.data
 
+import uk.co.markormesher.grid.helpers.getStringSet
+import uk.co.markormesher.grid.helpers.putStringSet
 import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.NeighbourSets
 import uk.co.markormesher.grid.model.makeSimpleGameState
 
 object LevelHelper {
+
+	const val DEFAULT_LEVEL = "1-1"
 
 	val allLevels by lazy {
 		val levels = ArrayList<Level>()
@@ -14,7 +18,7 @@ object LevelHelper {
 				stage = 1, subStage = 1, flips = 2,
 				initialState = makeSimpleGameState(size = 4, qtyCellStates = 2),
 				helpTitle = "Tutorial 1/4",
-				helpBody = "Some cells will be been flipped; tap them to flip them back."
+				helpBody = "Some cells will be flipped; tap them to flip them back."
 		))
 		levels.add(Level(
 				stage = 1, subStage = 2, flips = 2,
@@ -80,6 +84,10 @@ object LevelHelper {
 		return@lazy levels
 	}
 
+	private val levelsCompleted by lazy {
+		getStringSet("levelsCompleted")
+	}
+
 	private val levelPositionLookup by lazy {
 		val lookup = HashMap<String, Int>()
 		allLevels.forEachIndexed { index, level ->
@@ -88,7 +96,11 @@ object LevelHelper {
 		return@lazy lookup
 	}
 
-	fun getLevelIndex(tag: String) = levelPositionLookup[tag]!!
+	private fun getLevelIndex(tag: String) = levelPositionLookup[tag]!!
+
+	fun getLevel(tag: String): Level {
+		return allLevels[getLevelIndex(tag)]
+	}
 
 	fun hasNextLevel(tag: String) = getLevelIndex(tag) < allLevels.size - 1
 
@@ -97,5 +109,14 @@ object LevelHelper {
 	} else {
 		-1
 	}
+
+	fun isLevelCompleted(tag: String) = levelsCompleted.contains(tag)
+
+	fun markLevelCompleted(tag: String) {
+		levelsCompleted.add(tag)
+		putStringSet("levelsCompleted", levelsCompleted)
+	}
+
+	fun getNextLevelTag() = allLevels.first { !isLevelCompleted(it.tag) }.tag
 
 }

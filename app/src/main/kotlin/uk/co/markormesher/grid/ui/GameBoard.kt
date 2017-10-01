@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.ui.cell_decorator.BasicCellDecorator
 
-
 class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
 	: RecyclerView(context, attrs, defStyle) {
 

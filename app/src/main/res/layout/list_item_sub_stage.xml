@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:gravity="center"
 		android:background="?android:selectableItemBackground"
 		>
 
+	<ImageView
+			android:id="@+id/lock_icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/ic_lock_outline_white_48dp"
+			android:layout_centerInParent="true"
+			android:layout_margin="@dimen/space_small"
+			android:visibility="invisible"
+			/>
+
 	<TextView
-			android:id="@+id/subStageLabel"
+			android:id="@+id/sub_stage_label"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_margin="@dimen/space_small"
+			android:layout_centerInParent="true"
 			style="@style/level_select_sub_stage_text"
 			/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -13,6 +13,7 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import uk.co.markormesher.grid.data.LevelHelper
 import uk.co.markormesher.grid.model.NeighbourSets
 import uk.co.markormesher.grid.model.makeSimpleGameState
 import java.util.*
@@ -41,7 +42,7 @@ class PreGameActivity: AppCompatActivity() {
 		setContentView(R.layout.activity_pre_game)
 		btn_start_game.setOnClickListener {
 			val intent = Intent(this@PreGameActivity, GameActivity::class.java)
-			intent.putExtra("level", 0) // TODO: next level to play
+			intent.putExtra("level", LevelHelper.DEFAULT_LEVEL) // TODO: next level to play
 			startActivity(intent)
 		}
 		btn_all_levels.setOnClickListener {
