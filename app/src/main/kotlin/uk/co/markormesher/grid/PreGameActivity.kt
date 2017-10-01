@@ -13,14 +13,14 @@ import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import uk.co.markormesher.grid.model.Level
-import uk.co.markormesher.grid.model.makeSampleGameState
+import uk.co.markormesher.grid.model.NeighbourSets
+import uk.co.markormesher.grid.model.makeSimpleGameState
 import java.util.*
 
 class PreGameActivity: AppCompatActivity() {
 
 	private val size = 5
-	private val gameState = makeSampleGameState(size, 3)
+	private val gameState = makeSimpleGameState(size, 3, NeighbourSets.ADJACENT)
 	private val handler = Handler(Looper.getMainLooper())
 	private val flipRunnable = Runnable { doFlip() }
 	private val random = Random()
@@ -41,7 +41,7 @@ class PreGameActivity: AppCompatActivity() {
 		setContentView(R.layout.activity_pre_game)
 		btn_start_game.setOnClickListener {
 			val intent = Intent(this@PreGameActivity, GameActivity::class.java)
-			intent.putExtra("level", Level(1, 1, 5, 6, 2))
+			intent.putExtra("level", 0) // TODO: next level to play
 			startActivity(intent)
 		}
 		btn_all_levels.setOnClickListener {

@@ -1,22 +1,41 @@
 package uk.co.markormesher.grid.model
 
-fun makeSampleGameState(size: Int = 5, totalCellStates: Int = 2): GameState {
-	val state = GameState(size, totalCellStates)
+object NeighbourSets {
+	val NONE = emptyArray<GameState.Neighbour>()
+
+	val VERTICAL = arrayOf(
+			GameState.Neighbour.EAST,
+			GameState.Neighbour.WEST
+	)
+
+	val HORIZONTAL = arrayOf(
+			GameState.Neighbour.NORTH,
+			GameState.Neighbour.SOUTH
+	)
+
+	val ADJACENT = arrayOf(
+			GameState.Neighbour.NORTH,
+			GameState.Neighbour.EAST,
+			GameState.Neighbour.SOUTH,
+			GameState.Neighbour.WEST
+	)
+
+	val DIAGONAL = arrayOf(
+			GameState.Neighbour.NORTH_EAST,
+			GameState.Neighbour.SOUTH_EAST,
+			GameState.Neighbour.SOUTH_WEST,
+			GameState.Neighbour.NORTH_WEST
+	)
+}
+
+fun makeSimpleGameState(size: Int = 5, qtyCellStates: Int = 2, neighbours: Array<GameState.Neighbour> = NeighbourSets.NONE): GameState {
+	val state = GameState(size, qtyCellStates)
 
 	for (row in 0..(size - 1)) {
 		for (col in 0..(size - 1)) {
-			if (row != 0) {
-				state.addLinkedNeighbour(row, col, GameState.Neighbour.NORTH)
-			}
-			if (col != size - 1) {
-				state.addLinkedNeighbour(row, col, GameState.Neighbour.EAST)
-			}
-			if (row != size - 1) {
-				state.addLinkedNeighbour(row, col, GameState.Neighbour.SOUTH)
-			}
-			if (col != 0) {
-				state.addLinkedNeighbour(row, col, GameState.Neighbour.WEST)
-			}
+			neighbours
+					.filter { it.isAllowed(size, row, col) }
+					.forEach { state.addLinkedNeighbour(row, col, it) }
 		}
 	}
 

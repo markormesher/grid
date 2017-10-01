@@ -1,14 +1,15 @@
 package uk.co.markormesher.grid
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_game.*
@@ -16,10 +17,11 @@ import kotlinx.android.synthetic.main.merge_game_stats.*
 import kotlinx.android.synthetic.main.merge_pause_overlay.*
 import kotlinx.android.synthetic.main.merge_win_overlay.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import uk.co.markormesher.grid.data.LevelHelper
 import uk.co.markormesher.grid.helpers.SimpleTimer
+import uk.co.markormesher.grid.helpers.randomString
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.model.Level
-import uk.co.markormesher.grid.model.makeSampleGameState
 import java.util.*
 
 class GameActivity: AppCompatActivity() {
@@ -30,12 +32,14 @@ class GameActivity: AppCompatActivity() {
 		const val TIMER_UPDATE_FREQUENCY = 200L
 	}
 
-	private val random by lazy { Random() }
+	private val random = Random()
 
 	private var initialised = false
 	private lateinit var level: Level
 	private lateinit var gameState: GameState
 	private var lastGameStatus: GameState.Status? = null
+
+	private var helpDialogShown = false
 	private var initialFlipsStarted = false
 	private var initialFlipsDone = 0
 	private val initialFlipsUsed = HashSet<Pair<Int, Int>>()
@@ -61,11 +65,13 @@ class GameActivity: AppCompatActivity() {
 		Fabric.with(this, Crashlytics())
 
 		if (!initialised) {
-			level = intent?.extras?.getParcelable("level") ?: Level(0, 0, 5, 5, 2)
-			gameState = makeSampleGameState(level.size, level.cellStates)
+			initialised = true
+			level = LevelHelper.allLevels[intent?.extras?.getInt("level") ?: 0]
+			gameState = level.initialState
 		}
 
 		setState(savedInstanceState)
+		showHelpDialog()
 		initView()
 	}
 
@@ -97,6 +103,19 @@ class GameActivity: AppCompatActivity() {
 		}
 	}
 
+	private fun showHelpDialog() {
+		if (level.helpTitle != null || level.helpBody != null) {
+			helpDialogShown = true
+			AlertDialog.Builder(this)
+					.setTitle(level.helpTitle)
+					.setMessage(level.helpBody)
+					.setPositiveButton(R.string.ok, { _, _ -> startInitialFlips() })
+					.setCancelable(false)
+					.create()
+					.show()
+		}
+	}
+
 	private fun setState(savedInstanceState: Bundle?) {
 		gameState = savedInstanceState?.getParcelable("gameState") ?: gameState
 		initialFlipsStarted = savedInstanceState?.getBoolean("initialFlipsStarted") ?: initialFlipsStarted
@@ -125,12 +144,20 @@ class GameActivity: AppCompatActivity() {
 		btn_pause_resume.setOnClickListener { startOrResumeGame() }
 		btn_pause_quit.setOnClickListener { finish() }
 
-		btn_win_next.setOnClickListener { Toast.makeText(this@GameActivity, "Not implemented yet", Toast.LENGTH_SHORT).show() }
+		if (level.hasNextLevel()) {
+			btn_win_next.setOnClickListener {
+				val intent = Intent(this@GameActivity, GameActivity::class.java)
+				intent.putExtra("level", level.getNextLevelIndex())
+				startActivity(intent)
+				finish()
+			}
+		} else {
+			btn_win_next.alpha = 0.4f
+		}
 		btn_win_quit.setOnClickListener { finish() }
 
-		if (!initialFlipsStarted) {
-			initialFlipsStarted = true
-			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_DELAY)
+		if (!helpDialogShown) {
+			startInitialFlips()
 		}
 
 		onGameStatusChange()
@@ -153,12 +180,19 @@ class GameActivity: AppCompatActivity() {
 		game_board.alpha = if (gameState.status == GameState.Status.IN_PLAY) 1.0f else 0.4f
 	}
 
+	private fun startInitialFlips() {
+		if (!initialFlipsStarted) {
+			initialFlipsStarted = true
+			Handler(Looper.getMainLooper()).postDelayed({ doInitialFlip() }, INITIAL_FLIP_DELAY)
+		}
+	}
+
 	private fun doInitialFlip() {
 		if (initialFlipsDone < level.flips) {
 			// generate a unique flip (so we don't undo a previous flip)
 			var flip: Pair<Int, Int>
 			do {
-				flip = Pair(random.nextInt(level.size), random.nextInt(level.size))
+				flip = Pair(random.nextInt(gameState.size), random.nextInt(gameState.size))
 			} while (initialFlipsUsed.contains(flip))
 			initialFlipsUsed.add(flip)
 
@@ -216,5 +250,6 @@ class GameActivity: AppCompatActivity() {
 
 	private fun onGameWon() {
 		timer.pause()
+		win_title.text = randomString(R.array.win_titles)
 	}
 }

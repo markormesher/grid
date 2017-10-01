@@ -94,6 +94,10 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		SOUTH(16, 1, 0), SOUTH_WEST(32, 1, -1),
 		WEST(64, 0, -1), NORTH_WEST(128, -1, -1);
 
+		fun isAllowed(size: Int, row: Int, col: Int): Boolean {
+			return row + rowDiff in 0..(size - 1) && col + colDiff in 0..(size - 1)
+		}
+
 		companion object {
 			val ALL = arrayOf(NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST)
 		}

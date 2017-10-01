@@ -13,24 +13,23 @@ import kotlinx.android.synthetic.main.activity_level_select.*
 import kotlinx.android.synthetic.main.list_item_stage.view.*
 import kotlinx.android.synthetic.main.list_item_sub_stage.view.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import uk.co.markormesher.grid.model.Level
+import uk.co.markormesher.grid.data.LevelHelper
 
 class LevelSelectActivity: AppCompatActivity() {
 
 	private val columns = 6
-	private val levels = arrayListOf(
-			Level(1, 0, 0, 0, 0),
-			Level(1, 1, 4, 1, 2),
-			Level(1, 2, 4, 2, 2),
-			Level(1, 3, 4, 1, 3)
-	)
-	init {
-		for (stage in 2..5) {
-			levels.add(Level(stage, 0, 0, 0, 0))
-			for (subStage in 1..20) {
-				levels.add(Level(stage, subStage, 5, 6, 2))
+
+	private val levelListItems by lazy {
+		val items = ArrayList<LevelListItem>()
+		var lastStage = 0
+		LevelHelper.allLevels.forEachIndexed { index, level ->
+			if (level.stage != lastStage) {
+				lastStage = level.stage
+				items.add(LevelListItem(true, level.stage))
 			}
+			items.add(LevelListItem(false, level.subStage, index))
 		}
+		return@lazy items
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,9 +69,9 @@ class LevelSelectActivity: AppCompatActivity() {
 
 		private val inflater by lazy { LayoutInflater.from(applicationContext) }
 
-		override fun getItemCount() = levels.size
+		override fun getItemCount() = levelListItems.size
 
-		override fun getItemViewType(position: Int) = if (levels[position].subStage == 0) STAGE else SUB_STAGE
+		override fun getItemViewType(position: Int) = if (levelListItems[position].isStage) STAGE else SUB_STAGE
 
 		override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
 			return if (viewType == STAGE) {
@@ -86,14 +85,14 @@ class LevelSelectActivity: AppCompatActivity() {
 			val type = getItemViewType(position)
 			if (type == STAGE) {
 				with(holder as StageViewHolder) {
-					label.text = getString(R.string.level_select_stage, levels[position].stage)
+					label.text = getString(R.string.level_select_stage, levelListItems[position].number)
 				}
 			} else {
 				with(holder as SubStageViewHolder) {
-					label.text = getString(R.string.level_select_sub_stage, levels[position].subStage)
+					label.text = getString(R.string.level_select_sub_stage, levelListItems[position].number)
 					view.setOnClickListener {
 						val intent = Intent(this@LevelSelectActivity, GameActivity::class.java)
-						intent.putExtra("level", levels[position])
+						intent.putExtra("level", levelListItems[position].index)
 						startActivity(intent)
 						finish()
 					}
@@ -110,5 +109,7 @@ class LevelSelectActivity: AppCompatActivity() {
 	class SubStageViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 		val label = view.subStageLabel!!
 	}
+
+	data class LevelListItem(val isStage: Boolean, val number: Int, val index: Int = 0)
 
 }

@@ -73,7 +73,11 @@ class GameBoard @JvmOverloads constructor(context: Context, attrs: AttributeSet?
 				holder.assignedCol = col
 
 				cell.linkedNeighbours = gameState.cellLinkedNeighbours[row][col]
-				cell.setOnClickListener { gameState.flip(row, col) }
+				if (gameState.status == GameState.Status.IN_PLAY) {
+					cell.setOnClickListener { gameState.flip(row, col) }
+				} else {
+					cell.setOnClickListener(null)
+				}
 			}
 		}
 

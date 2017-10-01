@@ -2,6 +2,11 @@
 
 	<string name="app_name">Grid</string>
 
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+
 	<string name="pre_game_start">Start Game</string>
 	<string name="pre_game_all_levels">All Levels</string>
 	<string name="pre_game_badges">Badges</string>
@@ -30,7 +35,15 @@
 	<string name="paused_resume">Resume</string>
 	<string name="paused_quit">Quit</string>
 
-	<string name="win_title">You Win!</string>
+	<string-array name="win_titles">
+		<item>You Win!</item>
+		<item>Awesome!</item>
+		<item>Sweet!</item>
+		<item>Well Done!</item>
+		<item>Congratulations!</item>
+		<item>Great Job!</item>
+		<item>Nice One!</item>
+	</string-array>
 	<string name="win_next">Next Level</string>
 	<string name="win_quit">Quit</string>
 
