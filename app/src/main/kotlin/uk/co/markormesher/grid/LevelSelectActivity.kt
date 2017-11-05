@@ -17,7 +17,7 @@ import uk.co.markormesher.grid.data.LevelHelper
 
 class LevelSelectActivity: AppCompatActivity() {
 
-	private val columns = 6
+	private val columnWidth = 64 // dp
 
 	private val levelListItems by lazy {
 		val items = ArrayList<LevelListItem>()
@@ -48,6 +48,9 @@ class LevelSelectActivity: AppCompatActivity() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_level_select)
+
+		val screenWidthInDp = resources.configuration.screenWidthDp
+		val columns = screenWidthInDp / columnWidth
 
 		val layoutManager = GridLayoutManager(this, columns)
 		layoutManager.spanSizeLookup = object: GridLayoutManager.SpanSizeLookup() {
@@ -87,15 +90,31 @@ class LevelSelectActivity: AppCompatActivity() {
 			val type = getItemViewType(position)
 			if (type == STAGE) {
 				with(holder as StageViewHolder) {
-					label.text = getString(R.string.level_select_stage, levelListItems[position].number)
+					if (position == 0) {
+						label.text = getString(R.string.level_select_stage_tutorial, levelListItems[position].number)
+					} else {
+						label.text = getString(R.string.level_select_stage, levelListItems[position].number)
+					}
 				}
 			} else {
 				with(holder as SubStageViewHolder) {
 					val levelTag = levelListItems[position].tag
 					val level = LevelHelper.getLevel(levelTag)
-					if (LevelHelper.isLevelCompleted(level.tag) || level.tag == nextLevelTag) {
-						label.text = getString(R.string.level_select_sub_stage, levelListItems[position].number)
-						lockIcon.visibility = View.INVISIBLE
+					label.text = getString(R.string.level_select_sub_stage, levelListItems[position].number)
+
+					if (LevelHelper.isLevelCompleted(level) || level.tag == nextLevelTag) {
+						view.alpha = 1.0f
+
+						val levelScore = LevelHelper.getLevelScore(level)
+
+						icon1.visibility = View.VISIBLE
+						icon2.visibility = View.VISIBLE
+						icon3.visibility = View.VISIBLE
+
+						icon1.setImageResource(if (levelScore >= 1) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
+						icon2.setImageResource(if (levelScore >= 2) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
+						icon3.setImageResource(if (levelScore >= 3) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
+
 						view.setOnClickListener {
 							val intent = Intent(this@LevelSelectActivity, GameActivity::class.java)
 							intent.putExtra("level", level.tag)
@@ -103,8 +122,14 @@ class LevelSelectActivity: AppCompatActivity() {
 							finish()
 						}
 					} else {
-						label.text = null
-						lockIcon.visibility = View.VISIBLE
+						view.alpha = 0.4f
+
+						icon1.visibility = View.INVISIBLE
+						icon2.visibility = View.VISIBLE
+						icon3.visibility = View.INVISIBLE
+
+						icon2.setImageResource(R.drawable.ic_lock_outline_white_48dp)
+
 						view.setOnClickListener(null)
 					}
 				}
@@ -119,7 +144,9 @@ class LevelSelectActivity: AppCompatActivity() {
 
 	class SubStageViewHolder(val view: View): RecyclerView.ViewHolder(view) {
 		val label = view.sub_stage_label!!
-		val lockIcon = view.lock_icon!!
+		val icon1 = view.icon_1!!
+		val icon2 = view.icon_2!!
+		val icon3 = view.icon_3!!
 	}
 
 	data class LevelListItem(val isStage: Boolean, val number: Int, val tag: String = "")

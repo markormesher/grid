@@ -6,6 +6,16 @@ import uk.co.markormesher.grid.BaseApplication
 
 private fun getPrefs(): SharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.context)!!
 
+fun getInt(key: String, default: Int): Int {
+	return getPrefs().getInt(key, default)
+}
+
+fun putInt(key: String, value: Int) {
+	val editor = getPrefs().edit()
+	editor.putInt(key, value)
+	editor.apply()
+}
+
 fun getString(key: String, default: String): String {
 	return getPrefs().getString(key, default)
 }

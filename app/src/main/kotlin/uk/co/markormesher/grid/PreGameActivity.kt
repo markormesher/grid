@@ -42,7 +42,7 @@ class PreGameActivity: AppCompatActivity() {
 		setContentView(R.layout.activity_pre_game)
 		btn_start_game.setOnClickListener {
 			val intent = Intent(this@PreGameActivity, GameActivity::class.java)
-			intent.putExtra("level", LevelHelper.DEFAULT_LEVEL) // TODO: next level to play
+			intent.putExtra("level", LevelHelper.getNextLevelTag())
 			startActivity(intent)
 		}
 		btn_all_levels.setOnClickListener {

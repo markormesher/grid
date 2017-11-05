@@ -2,7 +2,6 @@ package uk.co.markormesher.grid.model
 
 import android.os.Parcel
 import android.os.Parcelable
-import uk.co.markormesher.grid.data.LevelHelper
 
 data class Level(
 		val stage: Int,
@@ -15,10 +14,6 @@ data class Level(
 
 	val tag: String
 		get() = "$stage-$subStage"
-
-	fun hasNextLevel() = LevelHelper.hasNextLevel(tag)
-
-	fun getNextLevelIndex() = LevelHelper.getNextLevelIndex(tag)
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
 		parcel.writeInt(stage)

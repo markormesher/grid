@@ -45,7 +45,7 @@
 
 	<style name="level_select_sub_stage_text">
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">16sp</item>
+		<item name="android:textSize">20sp</item>
 	</style>
 
 	<style name="overlay_title">

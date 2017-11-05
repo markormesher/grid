@@ -14,6 +14,7 @@
 
 	<string name="level_select_title">Select Level:</string>
 	<string name="level_select_stage">Stage %d</string>
+	<string name="level_select_stage_tutorial">Stage %d (Tutorial)</string>
 	<string name="level_select_sub_stage">%d</string>
 
 	<string name="stat_level_title">Level</string>

@@ -1,6 +1,8 @@
 package uk.co.markormesher.grid.data
 
+import uk.co.markormesher.grid.helpers.getInt
 import uk.co.markormesher.grid.helpers.getStringSet
+import uk.co.markormesher.grid.helpers.putInt
 import uk.co.markormesher.grid.helpers.putStringSet
 import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.NeighbourSets
@@ -102,21 +104,29 @@ object LevelHelper {
 		return allLevels[getLevelIndex(tag)]
 	}
 
-	fun hasNextLevel(tag: String) = getLevelIndex(tag) < allLevels.size - 1
+	fun hasNextLevel(level: Level) = getLevelIndex(level.tag) < allLevels.size - 1
 
-	fun getNextLevelIndex(tag: String) = if (hasNextLevel(tag)) {
-		getLevelIndex(tag) + 1
+	fun getNextLevelTag() = allLevels.firstOrNull { !isLevelCompleted(it) }?.tag ?: DEFAULT_LEVEL
+
+	fun getNextLevelTag(level: Level) = if (hasNextLevel(level)) {
+		allLevels[getLevelIndex(level.tag) + 1].tag
 	} else {
-		-1
+		DEFAULT_LEVEL
 	}
 
-	fun isLevelCompleted(tag: String) = levelsCompleted.contains(tag)
+	fun isLevelCompleted(level: Level) = levelsCompleted.contains(level.tag)
 
-	fun markLevelCompleted(tag: String) {
-		levelsCompleted.add(tag)
+	fun markLevelCompleted(level: Level, score: Int = 0) {
+		levelsCompleted.add(level.tag)
 		putStringSet("levelsCompleted", levelsCompleted)
+		putInt("levelScore-${level.tag}", score)
 	}
 
-	fun getNextLevelTag() = allLevels.first { !isLevelCompleted(it.tag) }.tag
+	fun getLevelScore(level: Level): Int {
+		if (!isLevelCompleted(level)) {
+			return 0
+		}
+		return getInt("levelScore-${level.tag}", 0)
+	}
 
 }

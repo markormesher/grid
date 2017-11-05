@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.merge_pause_overlay.*
 import kotlinx.android.synthetic.main.merge_win_overlay.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import uk.co.markormesher.grid.data.LevelHelper
+import uk.co.markormesher.grid.data.LevelHelper.markLevelCompleted
 import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.helpers.randomString
 import uk.co.markormesher.grid.model.GameState
@@ -144,10 +145,10 @@ class GameActivity: AppCompatActivity() {
 		btn_pause_resume.setOnClickListener { startOrResumeGame() }
 		btn_pause_quit.setOnClickListener { finish() }
 
-		if (level.hasNextLevel()) {
+		if (LevelHelper.hasNextLevel(level)) {
 			btn_win_next.setOnClickListener {
 				val intent = Intent(this@GameActivity, GameActivity::class.java)
-				intent.putExtra("level", level.getNextLevelIndex())
+				intent.putExtra("level", LevelHelper.getNextLevelTag(level))
 				startActivity(intent)
 				finish()
 			}
@@ -170,6 +171,7 @@ class GameActivity: AppCompatActivity() {
 		lastGameStatus = gameState.status
 
 		if (gameState.status == GameState.Status.WON) {
+			markLevelCompleted(level) // TODO: score
 			onGameWon()
 		}
 
