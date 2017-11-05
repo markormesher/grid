@@ -107,13 +107,12 @@ class LevelSelectActivity: AppCompatActivity() {
 
 						val levelScore = LevelHelper.getLevelScore(level)
 
-						icon1.visibility = View.VISIBLE
-						icon2.visibility = View.VISIBLE
-						icon3.visibility = View.VISIBLE
-
-						icon1.setImageResource(if (levelScore >= 1) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
-						icon2.setImageResource(if (levelScore >= 2) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
-						icon3.setImageResource(if (levelScore >= 3) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
+						val stars = arrayOf(icon1, icon2, icon3)
+						stars.forEachIndexed { index, star ->
+							star.visibility = View.VISIBLE
+							star.setImageResource(if (levelScore > index) R.drawable.ic_star_white_48dp else R.drawable.ic_star_border_white_48dp)
+							star.alpha = if (levelScore > index) 1.0f else 0.4f
+						}
 
 						view.setOnClickListener {
 							val intent = Intent(this@LevelSelectActivity, GameActivity::class.java)

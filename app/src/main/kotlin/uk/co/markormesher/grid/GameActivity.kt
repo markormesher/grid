@@ -172,8 +172,9 @@ class GameActivity: AppCompatActivity() {
 		lastGameStatus = gameState.status
 
 		if (gameState.status == GameState.Status.WON) {
-			markLevelCompleted(level) // TODO: score
-			onGameWon()
+			val score = level.getScore(gameState.userFlipCount)
+			markLevelCompleted(level, score)
+			onGameWon(score)
 		}
 
 		pause_overlay.visibility = if (gameState.status == GameState.Status.PAUSED) View.VISIBLE else View.GONE
@@ -251,8 +252,29 @@ class GameActivity: AppCompatActivity() {
 		gameState.status = GameState.Status.PAUSED
 	}
 
-	private fun onGameWon() {
+	private fun onGameWon(score: Int) {
 		timer.pause()
 		win_title.text = randomString(R.array.win_titles)
+
+		var delay = 0L
+		val stars = arrayOf(star_1, star_2, star_3)
+		stars.forEachIndexed { index, view ->
+			if (index < score) {
+				view.setImageResource(R.drawable.ic_star_white_48dp)
+				view.alpha = 1.0f
+			} else {
+				view.setImageResource(R.drawable.ic_star_border_white_48dp)
+				view.alpha = 0.4f
+			}
+		}
+
+		for (i in 0 until score) {
+			delay += 300L
+			stars[i].animate()
+					.rotationBy(360F)
+					.setDuration(600L)
+					.setStartDelay(delay)
+					.start()
+		}
 	}
 }

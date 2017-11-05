@@ -15,6 +15,12 @@ data class Level(
 	val tag: String
 		get() = "$stage-$subStage"
 
+	fun getScore(flipsUsed: Int) = when {
+		flipsUsed <= flips * initialState.totalCellStates * 1.5 -> 3
+		flipsUsed <= flips * initialState.totalCellStates * 2 -> 2
+		else -> 1
+	}
+
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
 		parcel.writeInt(stage)
 		parcel.writeInt(subStage)
