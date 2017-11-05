@@ -8,34 +8,23 @@
 		android:padding="@dimen/space_small"
 		>
 
-	<RelativeLayout
-			android:layout_width="match_parent"
+	<TextView
+			android:id="@+id/level_title"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_gravity="center"
 			android:layout_marginBottom="@dimen/space_small"
-			>
+			style="@style/AppTheme.MediumTitle"
+			/>
 
-		<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerVertical="true"
-				android:layout_alignParentLeft="true"
-				android:layout_alignParentStart="true"
-				android:text="@string/stat_level_title"
-				style="@style/game_stat_title"
-				/>
-
-		<TextView
-				android:id="@+id/stat_level"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerVertical="true"
-				android:layout_alignParentRight="true"
-				android:layout_alignParentEnd="true"
-				android:text="@string/stat_level_default"
-				style="@style/game_stat_value"
-				/>
-
-	</RelativeLayout>
+	<uk.co.markormesher.grid.ui.StateTransitionDisplay
+			android:id="@+id/state_transition_display"
+			android:layout_width="match_parent"
+			android:layout_height="20dp"
+			android:layout_marginBottom="@dimen/space_small"
+			android:gravity="center"
+			android:orientation="horizontal"
+			/>
 
 	<RelativeLayout
 			android:layout_width="match_parent"

@@ -23,7 +23,7 @@
 				android:layout_toLeftOf="@+id/game_board"
 				android:layout_toStartOf="@+id/game_board"
 				android:layout_centerVertical="true"
-				layout="@layout/merge_game_stats"
+				layout="@layout/merge_game_info"
 				/>
 
 		<uk.co.markormesher.grid.ui.GameBoard

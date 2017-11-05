@@ -22,7 +22,7 @@
 				android:layout_alignParentTop="true"
 				android:layout_above="@+id/game_board"
 				android:layout_centerHorizontal="true"
-				layout="@layout/merge_game_stats"
+				layout="@layout/merge_game_info"
 				/>
 
 		<uk.co.markormesher.grid.ui.GameBoard

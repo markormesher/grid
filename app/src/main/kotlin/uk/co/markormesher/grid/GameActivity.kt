@@ -12,7 +12,7 @@ import android.view.WindowManager
 import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.merge_game_stats.*
+import kotlinx.android.synthetic.main.merge_game_info.*
 import kotlinx.android.synthetic.main.merge_pause_overlay.*
 import kotlinx.android.synthetic.main.merge_win_overlay.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -105,7 +105,7 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun showHelpDialog() {
-		if (level.helpTitle != null || level.helpBody != null) {
+		if (!helpDialogShown && (level.helpTitle != null || level.helpBody != null)) {
 			helpDialogShown = true
 			CustomDialog(this)
 					.withTitle(level.helpTitle)
@@ -139,6 +139,9 @@ class GameActivity: AppCompatActivity() {
 
 		game_board.gameState = gameState
 		updateStats()
+
+		state_transition_display.gameState = gameState
+		state_transition_display.decorator = game_board.decorator
 
 		btn_pause_resume.setOnClickListener { startOrResumeGame() }
 		btn_pause_quit.setOnClickListener { finish() }
@@ -209,7 +212,7 @@ class GameActivity: AppCompatActivity() {
 	}
 
 	private fun updateStats() {
-		stat_level.text = getString(R.string.stat_level_value_format, level.stage, level.subStage)
+		level_title.text = getString(R.string.stat_level_value_format, level.stage, level.subStage)
 		stat_progress.text = getString(R.string.stat_progress_value_format, gameState.qtyWinningCells(), gameState.size * gameState.size)
 		stat_flips.text = getString(R.string.stat_flips_value_format, gameState.userFlipCount)
 	}

@@ -17,7 +17,6 @@
 	<string name="level_select_stage_tutorial">Stage %d (Tutorial)</string>
 	<string name="level_select_sub_stage">%d</string>
 
-	<string name="stat_level_title">Level</string>
 	<string name="stat_progress_title">Progress</string>
 	<string name="stat_time_title">Time</string>
 	<string name="stat_flips_title">Flips</string>
