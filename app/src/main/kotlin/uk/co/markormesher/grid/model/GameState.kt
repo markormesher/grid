@@ -99,6 +99,20 @@ class GameState(val size: Int, val totalCellStates: Int = 2): Parcelable {
 		}
 
 		companion object {
+			fun singleFromValue(value: Int) = when (value) {
+				1 -> NORTH
+				2 -> NORTH_EAST
+				4 -> EAST
+				8 -> SOUTH_EAST
+				16 -> SOUTH
+				32 -> SOUTH_WEST
+				64 -> WEST
+				128 -> NORTH_WEST
+				else -> throw IllegalArgumentException("Could not get neighbour value of $value")
+			}
+
+			fun arrayFromValue(value: Int) = ALL.filter { value.and(it.value) != 0 }.toTypedArray()
+
 			val ALL = arrayOf(NORTH, NORTH_EAST, EAST, SOUTH_EAST, SOUTH, SOUTH_WEST, WEST, NORTH_WEST)
 		}
 	}

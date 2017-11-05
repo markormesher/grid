@@ -14,14 +14,13 @@ import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_pre_game.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import uk.co.markormesher.grid.data.LevelHelper
+import uk.co.markormesher.grid.model.GameStateMaker
 import uk.co.markormesher.grid.model.NeighbourSets
-import uk.co.markormesher.grid.model.makeSimpleGameState
 import java.util.*
 
 class PreGameActivity: AppCompatActivity() {
 
-	private val size = 5
-	private val gameState = makeSimpleGameState(size, 3, NeighbourSets.ADJACENT)
+	private val gameState = GameStateMaker(5, 3, NeighbourSets.ADJACENT).makeGameState()
 	private val handler = Handler(Looper.getMainLooper())
 	private val flipRunnable = Runnable { doFlip() }
 	private val random = Random()
@@ -40,6 +39,7 @@ class PreGameActivity: AppCompatActivity() {
 		requestWindowFeature(Window.FEATURE_NO_TITLE)
 		window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
 		setContentView(R.layout.activity_pre_game)
+		btn_start_game_label.text = getString(R.string.pre_game_start_level, LevelHelper.getNextLevelTag())
 		btn_start_game.setOnClickListener {
 			val intent = Intent(this@PreGameActivity, GameActivity::class.java)
 			intent.putExtra("level", LevelHelper.getNextLevelTag())
@@ -68,7 +68,7 @@ class PreGameActivity: AppCompatActivity() {
 	}
 
 	private fun doFlip() {
-		gameState.flip(random.nextInt(size), random.nextInt(size), systemAction = true)
+		gameState.flip(random.nextInt(gameState.size), random.nextInt(gameState.size), systemAction = true)
 		handler.postDelayed(flipRunnable, 500L + random.nextInt(1500))
 	}
 

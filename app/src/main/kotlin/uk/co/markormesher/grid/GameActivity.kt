@@ -68,7 +68,7 @@ class GameActivity: AppCompatActivity() {
 		if (!initialised) {
 			initialised = true
 			level = LevelHelper.getLevel(intent?.extras?.getString("level") ?: LevelHelper.DEFAULT_LEVEL)
-			gameState = level.initialState
+			gameState = level.initialState.makeGameState()
 		}
 
 		setState(savedInstanceState)

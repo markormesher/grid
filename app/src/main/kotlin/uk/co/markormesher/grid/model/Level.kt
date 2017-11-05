@@ -7,7 +7,7 @@ data class Level(
 		val stage: Int,
 		val subStage: Int,
 		val flips: Int,
-		val initialState: GameState,
+		val initialState: GameStateMaker,
 		val helpTitle: String? = null,
 		val helpBody: String? = null
 ): Parcelable {
@@ -16,8 +16,8 @@ data class Level(
 		get() = "$stage-$subStage"
 
 	fun getScore(flipsUsed: Int) = when {
-		flipsUsed <= flips * initialState.totalCellStates * 1.5 -> 3
-		flipsUsed <= flips * initialState.totalCellStates * 2 -> 2
+		flipsUsed <= flips * initialState.qtyCellStates * 1.5 -> 3
+		flipsUsed <= flips * initialState.qtyCellStates * 2 -> 2
 		else -> 1
 	}
 

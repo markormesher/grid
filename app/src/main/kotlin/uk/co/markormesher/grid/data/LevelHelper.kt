@@ -4,9 +4,9 @@ import uk.co.markormesher.grid.helpers.getInt
 import uk.co.markormesher.grid.helpers.getStringSet
 import uk.co.markormesher.grid.helpers.putInt
 import uk.co.markormesher.grid.helpers.putStringSet
+import uk.co.markormesher.grid.model.GameStateMaker
 import uk.co.markormesher.grid.model.Level
 import uk.co.markormesher.grid.model.NeighbourSets
-import uk.co.markormesher.grid.model.makeSimpleGameState
 
 object LevelHelper {
 
@@ -25,25 +25,25 @@ object LevelHelper {
 		// tutorial levels
 		levels.add(Level(
 				stage = 1, subStage = nextSubStage(1), flips = 2,
-				initialState = makeSimpleGameState(size = 4, qtyCellStates = 2),
+				initialState = GameStateMaker(size = 4, qtyCellStates = 2),
 				helpTitle = "Tutorial 1/4",
 				helpBody = "Some cells have been flipped; tap them to flip them back."
 		))
 		levels.add(Level(
 				stage = 1, subStage = nextSubStage(1), flips = 2,
-				initialState = makeSimpleGameState(size = 4, qtyCellStates = 3),
+				initialState = GameStateMaker(size = 4, qtyCellStates = 3),
 				helpTitle = "Tutorial 2/4",
 				helpBody = "These cells have three states; tap them twice to flip them back."
 		))
 		levels.add(Level(
 				stage = 1, subStage = nextSubStage(1), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.VERTICAL),
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.VERTICAL),
 				helpTitle = "Tutorial 3/4",
 				helpBody = "White dots indicate neighbours. When you flip a cell, its neighbours flip too."
 		))
 		levels.add(Level(
 				stage = 1, subStage = nextSubStage(1), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.HORIZONTAL),
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.HORIZONTAL),
 				helpTitle = "Tutorial 4/4",
 				helpBody = "Neighbours can be in different places; always check the dots."
 		))
@@ -51,107 +51,107 @@ object LevelHelper {
 		// stage 2: get used to neighbours
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.VERTICAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.VERTICAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 3, neighbours = NeighbourSets.VERTICAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 3, defaultNeighbours = NeighbourSets.VERTICAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.VERTICAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.VERTICAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.VERTICAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.VERTICAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.HORIZONTAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.HORIZONTAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 3, neighbours = NeighbourSets.HORIZONTAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 3, defaultNeighbours = NeighbourSets.HORIZONTAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.HORIZONTAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.HORIZONTAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.HORIZONTAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.HORIZONTAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 1,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 1,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 2,
-				initialState = makeSimpleGameState(size = 5, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 5, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 4,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 4,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 2, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 2, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 4,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.ADJACENT)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.ADJACENT)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 3,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 4,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 		levels.add(Level(
 				stage = 2, subStage = nextSubStage(2), flips = 5,
-				initialState = makeSimpleGameState(size = 6, qtyCellStates = 3, neighbours = NeighbourSets.DIAGONAL)
+				initialState = GameStateMaker(size = 6, qtyCellStates = 3, defaultNeighbours = NeighbourSets.DIAGONAL)
 		))
 
 		return@lazy levels

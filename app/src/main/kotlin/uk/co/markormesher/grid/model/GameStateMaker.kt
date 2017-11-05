@@ -1,43 +1,64 @@
 package uk.co.markormesher.grid.model
 
-object NeighbourSets {
-	val NONE = emptyArray<GameState.Neighbour>()
+import android.os.Parcel
+import android.os.Parcelable
 
-	val VERTICAL = arrayOf(
-			GameState.Neighbour.EAST,
-			GameState.Neighbour.WEST
-	)
+class GameStateMaker(
+		val size: Int = 2,
+		val qtyCellStates: Int = 2,
+		val defaultNeighbours: Int = NeighbourSets.NONE
+): Parcelable {
 
-	val HORIZONTAL = arrayOf(
-			GameState.Neighbour.NORTH,
-			GameState.Neighbour.SOUTH
-	)
+	fun makeGameState(): GameState {
+		val state = GameState(size, qtyCellStates)
 
-	val ADJACENT = arrayOf(
-			GameState.Neighbour.NORTH,
-			GameState.Neighbour.EAST,
-			GameState.Neighbour.SOUTH,
-			GameState.Neighbour.WEST
-	)
-
-	val DIAGONAL = arrayOf(
-			GameState.Neighbour.NORTH_EAST,
-			GameState.Neighbour.SOUTH_EAST,
-			GameState.Neighbour.SOUTH_WEST,
-			GameState.Neighbour.NORTH_WEST
-	)
-}
-
-fun makeSimpleGameState(size: Int = 5, qtyCellStates: Int = 2, neighbours: Array<GameState.Neighbour> = NeighbourSets.NONE): GameState {
-	val state = GameState(size, qtyCellStates)
-
-	for (row in 0..(size - 1)) {
-		for (col in 0..(size - 1)) {
-			neighbours
-					.filter { it.isAllowed(size, row, col) }
-					.forEach { state.addLinkedNeighbour(row, col, it) }
+		val defaultNeighboursAsArray = GameState.Neighbour.arrayFromValue(defaultNeighbours)
+		for (row in 0 until size) {
+			for (col in 0 until size) {
+				defaultNeighboursAsArray
+						.filter { it.isAllowed(size, row, col) }
+						.forEach { state.addLinkedNeighbour(row, col, it) }
+			}
 		}
+
+		return state
 	}
 
-	return state
+	override fun writeToParcel(parcel: Parcel, flags: Int) {
+		parcel.writeInt(size)
+		parcel.writeInt(qtyCellStates)
+		parcel.writeInt(defaultNeighbours)
+	}
+
+	override fun describeContents() = 0
+
+	companion object CREATOR: Parcelable.Creator<GameStateMaker> {
+		override fun createFromParcel(parcel: Parcel): GameStateMaker {
+			return GameStateMaker(parcel.readInt(), parcel.readInt(), parcel.readInt())
+		}
+
+		override fun newArray(size: Int): Array<GameStateMaker?> {
+			return arrayOfNulls(size)
+		}
+	}
+}
+
+object NeighbourSets {
+	val NONE = 0
+
+	val VERTICAL = GameState.Neighbour.EAST.value
+			.or(GameState.Neighbour.WEST.value)
+
+	val HORIZONTAL = GameState.Neighbour.NORTH.value
+			.or(GameState.Neighbour.SOUTH.value)
+
+	val ADJACENT = GameState.Neighbour.NORTH.value
+			.or(GameState.Neighbour.EAST.value)
+			.or(GameState.Neighbour.SOUTH.value)
+			.or(GameState.Neighbour.WEST.value)
+
+	val DIAGONAL = GameState.Neighbour.NORTH_EAST.value
+			.or(GameState.Neighbour.SOUTH_EAST.value)
+			.or(GameState.Neighbour.SOUTH_WEST.value)
+			.or(GameState.Neighbour.NORTH_WEST.value)
 }
