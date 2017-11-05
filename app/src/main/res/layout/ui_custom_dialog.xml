@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingTop="@dimen/space_small"
+		android:paddingLeft="@dimen/space_small"
+		android:paddingRight="@dimen/space_small"
+		android:gravity="center"
+		android:background="@color/black"
+		>
+
+	<TextView
+			android:id="@+id/dialog_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/space_small"
+			android:gravity="center"
+			style="@style/custom_dialog_title"
+			/>
+
+	<TextView
+			android:id="@+id/dialog_body"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/space_small"
+			android:gravity="center"
+			style="@style/custom_dialog_body"
+			/>
+
+	<LinearLayout
+			android:id="@+id/dialog_ok_btn"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			style="@style/large_button_wrapper"
+			>
+
+		<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/space_nano"
+				android:src="@drawable/ic_done_white_48dp"
+				android:contentDescription="@string/ok"
+				style="@style/large_button_icon"
+				/>
+
+		<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/ok"
+				style="@style/large_button_label"
+				/>
+
+	</LinearLayout>
+
+</LinearLayout>

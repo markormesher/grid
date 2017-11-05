@@ -20,7 +20,7 @@ object LevelHelper {
 				stage = 1, subStage = 1, flips = 2,
 				initialState = makeSimpleGameState(size = 4, qtyCellStates = 2),
 				helpTitle = "Tutorial 1/4",
-				helpBody = "Some cells will be flipped; tap them to flip them back."
+				helpBody = "Some cells have been flipped; tap them to flip them back."
 		))
 		levels.add(Level(
 				stage = 1, subStage = 2, flips = 2,

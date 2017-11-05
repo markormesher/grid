@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.Window
@@ -23,6 +22,7 @@ import uk.co.markormesher.grid.helpers.SimpleTimer
 import uk.co.markormesher.grid.helpers.randomString
 import uk.co.markormesher.grid.model.GameState
 import uk.co.markormesher.grid.model.Level
+import uk.co.markormesher.grid.ui.CustomDialog
 import java.util.*
 
 class GameActivity: AppCompatActivity() {
@@ -107,12 +107,10 @@ class GameActivity: AppCompatActivity() {
 	private fun showHelpDialog() {
 		if (level.helpTitle != null || level.helpBody != null) {
 			helpDialogShown = true
-			AlertDialog.Builder(this) // TODO: custom dialog
-					.setTitle(level.helpTitle)
-					.setMessage(level.helpBody)
-					.setPositiveButton(R.string.ok, { _, _ -> startInitialFlips() })
-					.setCancelable(false)
-					.create()
+			CustomDialog(this)
+					.withTitle(level.helpTitle)
+					.withBody(level.helpBody)
+					.withOnCloseListener({ startInitialFlips() })
 					.show()
 		}
 	}

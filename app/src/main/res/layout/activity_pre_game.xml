@@ -25,6 +25,7 @@
 			android:layout_below="@id/game_title"
 			android:layout_above="@+id/navigation_wrapper"
 			android:padding="@dimen/space_large"
+			android:gravity="center"
 			android:orientation="horizontal"
 			>
 
